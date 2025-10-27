@@ -5,13 +5,19 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "dev:cf": "wrangler pages dev --port 3000 -- bun run dev --port 3001",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "nuxt": "^4.2.0",
-    "vue": "^3.5.22",
-    "vue-router": "^4.6.3"
+    "nuxt": "4.2.0",
+    "vue": "3.5.22",
+    "vue-router": "4.6.3",
+    "zod": "4.1.12"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "4.20251014.0",
+    "@nuxt/eslint": "1.9.0"
   }
 }
