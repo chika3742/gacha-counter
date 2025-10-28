@@ -1,4 +1,5 @@
 import vuetify from "vite-plugin-vuetify"
+import * as fs from "node:fs"
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -36,6 +37,11 @@ export default defineNuxtConfig({
       exclude: [
         "../functions/**/*",
       ],
+    },
+  },
+  hooks: {
+    "nitro:build:public-assets"() {
+      fs.cpSync("./functions", "./dist/functions", { recursive: true })
     },
   },
   eslint: {

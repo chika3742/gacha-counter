@@ -1,6 +1,5 @@
-import type { GachaLogResponse, GachaLogResponseItem, GachaTypeMeta } from "./gacha-api.js"
 import { GachaApi } from "./gacha-api.js"
-import type { FetchGachaLogRequest } from "../api/fetch-gacha-log.js"
+import type { FetchGachaLogRequest, GachaLogResponse, GachaLogResponseItem, GachaTypeMeta } from "../types.js"
 
 export class GachaLooper {
   constructor(
@@ -29,7 +28,7 @@ export class GachaLooper {
       this.fetchedCount += response.data.list.length
       this.onProgress?.()
 
-      if (this.untilLatestRare && this.containsRareItems(result)) {
+      if (this.untilLatestRare && GachaLooper.containsRareItems(result)) {
         break
       }
       if (response.data.list.length < GachaApi.itemsPerPage) {
@@ -51,7 +50,7 @@ export class GachaLooper {
     return result
   }
 
-  containsRareItems(items: GachaLogResponseItem[]) {
+  private static containsRareItems(items: GachaLogResponseItem[]) {
     return items.some(e => e.rank_type === "4")
       && items.some(e => e.rank_type === "5")
   }

@@ -1,4 +1,4 @@
-import type { GachaTypeMeta } from "./gacha-api.js"
+import type { GachaTypeMeta } from "./types.js"
 
 const genshinEp = "https://public-operation-hk4e-sg.hoyoverse.com/common/gacha_record/api/getGachaLog"
 const hsrEp = "https://public-operation-hkrpg-sg.hoyoverse.com/common/gacha_record/api/getGachaLog"

@@ -1,23 +1,4 @@
-export interface GachaTypeMeta {
-  id: string
-  apiEndpoint: string
-}
-
-export interface GachaLogResponseItem {
-  id: string
-  name: string
-  rank_type: string
-  item_type: "Character" | "Light Cone" | "Weapon"
-  time: string
-}
-
-export interface GachaLogResponse {
-  retcode: number
-  message: string
-  data?: {
-    list: GachaLogResponseItem[]
-  }
-}
+import type { GachaLogResponse, GachaTypeMeta } from "../types.js"
 
 export class GachaApi {
   constructor(

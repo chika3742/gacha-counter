@@ -1,32 +1,10 @@
-import * as z from "zod"
-import type { GachaLogResponseItem } from "../utils/gacha-api.js"
 import { GachaApi } from "../utils/gacha-api.js"
 import { GachaApiError, GachaLooper } from "../utils/gacha-looper.js"
-import { gachaTypeRecord, gameTypes } from "../utils/gacha-types.js"
+import { gachaTypeRecord } from "../constants.js"
+import type { FetchStatus } from "../types.js"
+import { FetchGachaLogRequest } from "../types.js"
 
-const FetchGachaLogRequest = z.object({
-  game: z.enum(gameTypes),
-  authkey: z.string().min(1),
-  region: z.string().min(1),
-  endIds: z.record(z.string(), z.string()),
-  untilLatestRare: z.boolean().optional().default(false),
-})
-
-export type FetchGachaLogRequest = z.infer<typeof FetchGachaLogRequest>
-interface FetchStatus {
-  status: "processing" | "done" | "error"
-  error?: {
-    type: "remote-api-error"
-    retcode?: number
-  } | {
-    type: "unknown"
-  }
-  fetchedCount?: number
-  gachaTypeProgress?: number
-  totalGachaTypes?: number
-  result?: GachaLogResponseItem[]
-}
-
+// noinspection JSUnusedGlobalSymbols
 export const onRequest: PagesFunction = async (context) => {
   if (context.request.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 })
