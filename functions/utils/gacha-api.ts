@@ -1,6 +1,3 @@
-export const gameTypes = ["hsr", "genshin"] as const
-export type GameType = typeof gameTypes[number]
-
 export interface GachaTypeMeta {
   id: string
   apiEndpoint: string

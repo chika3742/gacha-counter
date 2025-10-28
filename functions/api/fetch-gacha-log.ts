@@ -1,8 +1,8 @@
 import * as z from "zod"
 import type { GachaLogResponseItem } from "../utils/gacha-api.js"
-import { GachaApi, gameTypes } from "../utils/gacha-api.js"
+import { GachaApi } from "../utils/gacha-api.js"
 import { GachaApiError, GachaLooper } from "../utils/gacha-looper.js"
-import { gachaTypeRecord } from "../utils/gacha-types.js"
+import { gachaTypeRecord, gameTypes } from "../utils/gacha-types.js"
 
 const FetchGachaLogRequest = z.object({
   game: z.enum(gameTypes),
