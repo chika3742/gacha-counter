@@ -10,9 +10,13 @@ const dialog = useDialog()
     </v-app-bar>
 
     <v-main>
-      <v-container>
-        <NuxtPage />
-      </v-container>
+      <div class="h-100 d-flex flex-column">
+        <v-container>
+          <NuxtPage />
+        </v-container>
+        <v-spacer />
+        <AppFooter class="flex-0-0" />
+      </div>
     </v-main>
 
     <!-- global snackbar -->
