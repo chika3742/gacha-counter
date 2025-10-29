@@ -100,4 +100,9 @@ progress: "{count} 件の{gacha}を取得しました（{current}/{total}）"
 
 errors:
   invalidUrl: URLの形式が正しくありません。再度確認してください。
+  invalidResponse: サーバーから無効な返答を受け取りました。しばらくしてから再度お試しください。
   network: ネットワークエラーが発生しました。しばらくしてから再度お試しください。
+  authKeyTimeout: URLの有効期限が切れています。再度取得してください。
+  invalidAuthKey: 無効なURLです。再度取得してください。
+  tooManyRequests: サーバーへのリクエストが多すぎます。しばらくしてから再度お試しください。
+  unknown: 不明なエラーが発生しました。しばらくしてから再度お試しください。

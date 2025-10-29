@@ -1,11 +1,12 @@
 import { type FetchGachaLogRequest, FetchStatus } from "~~/functions/types.js"
 import { fetchEventSource } from "@microsoft/fetch-event-source"
+import { GachaFetchApiError, GachaFetchClientError } from "~/types/errors.js"
 
 export const useFetchProgressStore = defineStore("fetch-progress", {
   state: () => ({} as Partial<FetchStatus>),
   actions: {
     async fetch(request: FetchGachaLogRequest) {
-      const updateState = (data: FetchStatus) => {
+      const updateState = (data: Partial<FetchStatus>) => {
         Object.assign(this, data)
       }
 
@@ -17,13 +18,24 @@ export const useFetchProgressStore = defineStore("fetch-progress", {
         body: JSON.stringify(request),
         async onopen(resp) {
           if (!resp.ok) {
-            throw new Error(`Request failed with status ${resp.status} ${resp.statusText}`)
+            throw new GachaFetchClientError(
+              "errors.network",
+              new Error(`Request failed with status ${resp.status} ${resp.statusText}`),
+            )
           }
         },
         onmessage(ev) {
-          const data = FetchStatus.parse(JSON.parse(ev.data))
+          let data: FetchStatus
+          try {
+            data = FetchStatus.parse(JSON.parse(ev.data))
+          } catch (e) {
+            updateState({ status: "error" })
+            throw new GachaFetchClientError("errors.invalidResponse", e as Error)
+          }
           updateState(data)
-          console.log(data)
+          if (data.error) {
+            throw new GachaFetchApiError(data.error)
+          }
         },
         onerror(err) {
           throw err

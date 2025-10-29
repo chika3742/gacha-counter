@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import iconGenshin from "~/assets/img/icon_genshin.png"
 import iconHsr from "~/assets/img/icon_hsr.png"
+import { GachaFetchApiError, GachaFetchClientError } from "~/types/errors.js"
 
 const snackbar = useSnackbar()
 const i18n = useI18n()
@@ -72,7 +73,14 @@ const getHistory = async () => {
     config.url = url.value
   } catch (e) {
     console.error(e)
-    snackbar.show(i18n.t("errors.network"), "error")
+    let i18nKey = "errors.unknown"
+    if (e instanceof GachaFetchApiError) {
+      i18nKey = e.messageI18nKey
+    }
+    if (e instanceof GachaFetchClientError) {
+      i18nKey = e.messageI18nKey
+    }
+    snackbar.show(i18n.t(i18nKey), "error")
   }
 }
 
