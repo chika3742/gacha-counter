@@ -2,8 +2,6 @@
 import xLogo from "~/assets/vec/X_logo.svg"
 
 const repositoryUrl = "https://github.com/chika3742/gacha-counter"
-
-const i18n = useI18n()
 </script>
 
 <template>
@@ -42,12 +40,12 @@ const i18n = useI18n()
       <v-menu activator="parent">
         <v-list>
           <v-list-item
-            v-for="lang in $i18n.availableLocales"
-            :key="lang"
-            :active="$i18n.locale === lang"
-            @click="$i18n.setLocale(lang)"
+            v-for="locale in $i18n.locales.value"
+            :key="locale.code"
+            :active="$i18n.locale === locale.code"
+            @click="$i18n.setLocale(locale.code)"
           >
-            <v-list-item-title>{{ i18n.locales.value.find((e) => e.code === lang)?.name }}</v-list-item-title>
+            <v-list-item-title>{{ locale.name }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>

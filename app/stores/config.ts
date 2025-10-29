@@ -3,8 +3,8 @@ import type { GameType } from "~~/functions/constants.js"
 export const useConfigStore = defineStore("config", () => {
   const state = {
     game: ref("genshin" as GameType),
-    url: ref(""),
-    fetchAllHistory: ref(false),
+    urlRecord: ref({} as Record<GameType, string>),
+    fetchAllHistory: ref({} as Record<GameType, boolean>),
   } satisfies Record<string, Ref>
 
   // Localstorage hydration
@@ -12,7 +12,10 @@ export const useConfigStore = defineStore("config", () => {
     const saved = localStorage.getItem("config")
     if (saved) {
       for (const stateKey in state) {
-        state[stateKey as keyof typeof state]!.value = JSON.parse(saved)[stateKey]
+        const value = JSON.parse(saved)[stateKey]
+        if (typeof value !== "undefined") {
+          state[stateKey as keyof typeof state]!.value = value
+        }
       }
     }
   })

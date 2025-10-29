@@ -2,6 +2,7 @@
 import iconGenshin from "~/assets/img/icon_genshin.png"
 import iconHsr from "~/assets/img/icon_hsr.png"
 import { GachaFetchApiError, GachaFetchClientError } from "~/types/errors.js"
+import type { GameType } from "~~/functions/constants.js"
 
 const snackbar = useSnackbar()
 const i18n = useI18n()
@@ -23,11 +24,21 @@ const games = [
   },
 ]
 
-const url = ref("")
+const urlRecord = ref({} as Record<GameType, string>)
 const urlError = ref("")
 
+const url = computed({
+  get: () => urlRecord.value[config.game] ?? "",
+  set: (value: string) => urlRecord.value[config.game] = value,
+})
+
+const fetchAllHistory = computed({
+  get: () => config.fetchAllHistory[config.game] ?? false,
+  set: (value: boolean) => config.fetchAllHistory = { ...config.fetchAllHistory, [config.game]: value },
+})
+
 onMounted(() => {
-  url.value = config.url
+  urlRecord.value = config.urlRecord
 })
 
 const progressText = computed(() => {
@@ -67,10 +78,13 @@ const getHistory = async () => {
       region,
       game: config.game,
       endIds: {}, // TODO
-      untilLatestRare: !config.fetchAllHistory,
+      untilLatestRare: !fetchAllHistory.value,
     })
 
-    config.url = url.value
+    config.urlRecord = {
+      ...config.urlRecord,
+      [config.game]: url.value,
+    }
   } catch (e) {
     console.error(e)
     let i18nKey = "errors.unknown"
@@ -95,6 +109,7 @@ const clearHistory = () => {
       v-model="config.game"
       style="height: 70px"
       :disabled="processing"
+      mandatory
     >
       <v-btn
         v-for="entry in games"
@@ -126,7 +141,7 @@ const clearHistory = () => {
       />
       <div class="mb-4">
         <v-checkbox
-          v-model="config.fetchAllHistory"
+          v-model="fetchAllHistory"
           :disabled="processing || false"
           :label="$t('fetchAllHistory')"
           color="primary"
