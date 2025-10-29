@@ -26,7 +26,7 @@ export const onRequest: PagesFunction = async (context) => {
   }
 
   const api = new GachaApi(request.authkey, request.region)
-  const looper = new GachaLooper(api, gachaTypeRecord[request.game])
+  const looper = new GachaLooper(api, gachaTypeRecord[request.game], request.untilLatestRare)
 
   looper.onProgress = () => {
     sendStatus({
