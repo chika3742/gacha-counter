@@ -40,7 +40,7 @@ export const onRequest: PagesFunction = async (context) => {
 
   void (async () => {
     try {
-      const result = await looper.fetchAllGachaTypes(request.endIds)
+      const result = await looper.fetchAllGachaTypes(request.latestIds)
 
       await sendStatus({
         status: "done",

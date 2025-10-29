@@ -1,5 +1,6 @@
 import { GachaApi } from "./gacha-api.js"
 import type { FetchGachaLogRequest, GachaLogResponse, GachaLogResponseItem, GachaTypeMeta } from "../types.js"
+import { takeWhile } from "es-toolkit"
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -17,38 +18,39 @@ export class GachaLooper {
   gachaTypeProgress: number = 0
   totalGachaTypes: number
 
-  private async fetchGachaType(type: GachaTypeMeta, endId: string) {
+  private async fetchGachaType(type: GachaTypeMeta, latestId: string) {
     const result: GachaLogResponseItem[] = []
-    let _endId = endId
+    let _endId = "0"
 
     while (true) {
       const response = await this.api.getGachaLog(type, _endId)
       if (response.retcode !== 0) {
         throw new GachaApiError(response)
       }
-      result.push(...response.data.list)
-      this.fetchedCount += response.data.list.length
+      const newItems = takeWhile(response.data.list, item => item.id !== latestId)
+      result.push(...newItems)
+      this.fetchedCount += newItems.length
       this.onProgress?.()
 
       if (this.untilLatestRare && GachaLooper.containsRareItems(result)) {
         break
       }
-      if (response.data.list.length < GachaApi.itemsPerPage) {
+      if (newItems.length < GachaApi.itemsPerPage) {
         break
       }
-      _endId = response.data.list.slice(-1)[0].id
+      _endId = newItems.slice(-1)[0].id
       await sleep(800)
     }
 
     return result
   }
 
-  async fetchAllGachaTypes(endIds: FetchGachaLogRequest["endIds"]) {
+  async fetchAllGachaTypes(latestIds: FetchGachaLogRequest["latestIds"]) {
     const result: GachaLogResponseItem[] = []
     for (const gachaType of this.gachaTypes) {
       this.gachaTypeProgress++
       this.onProgress?.()
-      result.push(...await this.fetchGachaType(gachaType, endIds[gachaType.id] ?? "0"))
+      result.push(...await this.fetchGachaType(gachaType, latestIds[gachaType.id]))
       await sleep(800)
     }
     return result

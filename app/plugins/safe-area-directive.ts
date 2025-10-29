@@ -1,6 +1,7 @@
 import type { Directive } from "vue"
-import { clone, defaults } from "lodash-es"
 import { defineNuxtPlugin } from "#imports"
+import { clone } from "es-toolkit"
+import { defaults } from "es-toolkit/compat"
 
 export interface SafeAreaOptions {
   /**

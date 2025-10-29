@@ -77,7 +77,7 @@ const getHistory = async () => {
       authkey,
       region,
       game: config.game,
-      endIds: {}, // TODO
+      latestIds: {}, // TODO
       untilLatestRare: !fetchAllHistory.value,
     })
 

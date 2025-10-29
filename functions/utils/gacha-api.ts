@@ -21,7 +21,7 @@ export class GachaApi {
     }
   }
 
-  async getGachaLog(type: GachaTypeMeta, endId?: string) {
+  async getGachaLog(type: GachaTypeMeta, endId?: string): Promise<GachaLogResponse> {
     const params = {
       ...this.commonParams,
       gacha_type: type.id,
