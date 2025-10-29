@@ -1,6 +1,8 @@
 import { GachaApi } from "./gacha-api.js"
 import type { FetchGachaLogRequest, GachaLogResponse, GachaLogResponseItem, GachaTypeMeta } from "../types.js"
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
 export class GachaLooper {
   constructor(
     public readonly api: GachaApi,
@@ -35,6 +37,7 @@ export class GachaLooper {
         break
       }
       _endId = response.data.list.slice(-1)[0].id
+      await sleep(800)
     }
 
     return result
@@ -46,6 +49,7 @@ export class GachaLooper {
       this.gachaTypeProgress++
       this.onProgress?.()
       result.push(...await this.fetchGachaType(gachaType, endIds[gachaType.id] ?? "0"))
+      await sleep(800)
     }
     return result
   }
