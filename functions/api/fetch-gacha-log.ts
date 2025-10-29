@@ -31,6 +31,7 @@ export const onRequest: PagesFunction = async (context) => {
   looper.onProgress = () => {
     sendStatus({
       status: "processing",
+      game: request.game,
       fetchedCount: looper.fetchedCount,
       gachaTypeProgress: looper.gachaTypeProgress,
       totalGachaTypes: looper.totalGachaTypes,
@@ -43,6 +44,7 @@ export const onRequest: PagesFunction = async (context) => {
 
       await sendStatus({
         status: "done",
+        game: request.game,
         result,
       })
     } catch (e) {
@@ -60,6 +62,7 @@ export const onRequest: PagesFunction = async (context) => {
       }
       await sendStatus({
         status: "error",
+        game: request.game,
         error,
       })
     }
