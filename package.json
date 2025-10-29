@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "@mdi/font": "7.4.47",
+    "@microsoft/fetch-event-source": "2.0.1",
     "@nuxtjs/i18n": "10.1.2",
+    "@pinia/nuxt": "0.11.2",
     "dexie": "4.2.1",
     "invert-color": "2.0.0",
     "marked": "16.4.1",

@@ -6,7 +6,7 @@ const dialog = useDialog()
 <template>
   <v-app>
     <v-app-bar>
-      <v-app-bar-title>Test</v-app-bar-title>
+      <v-app-bar-title>{{ $t("appName") }}</v-app-bar-title>
     </v-app-bar>
 
     <v-main>
@@ -59,5 +59,7 @@ const dialog = useDialog()
         </template>
       </v-card>
     </v-dialog>
+
+    <Loader />
   </v-app>
 </template>

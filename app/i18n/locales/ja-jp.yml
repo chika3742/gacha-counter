@@ -1,7 +1,13 @@
+appName: 天井カウンター
+
 ui:
   ok: OK
   cancel: キャンセル
   copied: コピーしました
+
+games:
+  genshin: 原神
+  hsr: 崩壊：スターレイル
 
 placeholders:
   genshin:
@@ -84,6 +90,14 @@ howToGetUrl:
       1. {game}を起動し、{historyOperation}を開きます。
       1. 自動的にURLがコピーされ、スクリプトが終了します。
 
-games:
-  genshin: 原神
-  hsr: 崩壊：スターレイル
+fetchAllHistory: 天井カウントの履歴を表示
+fetchAllHistoryDesc: オンにすると過去6ヶ月（24ヶ月）の全ての履歴を取得し、天井カウントの履歴を確認できますが、初回の取得に時間がかかります。変更するには、履歴をクリアする必要があります。
+urlInput: URL入力
+getHistory: 履歴を取得
+clearHistory: 履歴をクリア
+preparing: 履歴取得の準備をしています...
+progress: "{count} 件の{gacha}を取得しました（{current}/{total}）"
+
+errors:
+  invalidUrl: URLの形式が正しくありません。再度確認してください。
+  network: ネットワークエラーが発生しました。しばらくしてから再度お試しください。

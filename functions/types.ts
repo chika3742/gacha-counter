@@ -6,13 +6,15 @@ export interface GachaTypeMeta {
   apiEndpoint: string
 }
 
-export interface GachaLogResponseItem {
-  id: string
-  name: string
-  rank_type: string
-  item_type: "Character" | "Light Cone" | "Weapon"
-  time: string
-}
+export const GachaLogResponseItem = z.object({
+  id: z.string(),
+  name: z.string(),
+  rank_type: z.string(),
+  item_type: z.enum(["Character", "Light Cone", "Weapon"] as const),
+  time: z.string(),
+})
+
+export type GachaLogResponseItem = z.infer<typeof GachaLogResponseItem>
 
 export interface GachaLogResponse {
   retcode: number
@@ -31,16 +33,22 @@ export const FetchGachaLogRequest = z.object({
 })
 export type FetchGachaLogRequest = z.infer<typeof FetchGachaLogRequest>
 
-export interface FetchStatus {
-  status: "processing" | "done" | "error"
-  error?: {
-    type: "remote-api-error"
-    retcode?: number
-  } | {
-    type: "unknown"
-  }
-  fetchedCount?: number
-  gachaTypeProgress?: number
-  totalGachaTypes?: number
-  result?: GachaLogResponseItem[]
-}
+export const FetchStatus = z.object({
+  status: z.enum(["processing", "done", "error"] as const),
+  game: z.enum(gameTypes),
+  error: z.union([
+    z.object({
+      type: z.literal("remote-api-error"),
+      retcode: z.number().optional(),
+    }),
+    z.object({
+      type: z.literal("unknown"),
+    }),
+  ]).optional(),
+  fetchedCount: z.number().optional(),
+  gachaTypeProgress: z.number().optional(),
+  totalGachaTypes: z.number().optional(),
+  result: z.array(GachaLogResponseItem).optional(),
+})
+
+export type FetchStatus = z.infer<typeof FetchStatus>
