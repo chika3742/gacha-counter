@@ -18,7 +18,7 @@ export class GachaLooper {
   gachaTypeProgress: number = 0
   totalGachaTypes: number
 
-  private async fetchGachaType(type: GachaTypeMeta, latestId: string) {
+  private async fetchGachaType(type: GachaTypeMeta, latestId: string | undefined) {
     const result: GachaLogResponseItem[] = []
     let _endId = "0"
 
@@ -28,6 +28,10 @@ export class GachaLooper {
         throw new GachaApiError(response)
       }
       const newItems = takeWhile(response.data.list, item => item.id !== latestId)
+        .map(item => ({
+          ...item,
+          queryGachaType: type.id,
+        }))
       result.push(...newItems)
       this.fetchedCount += newItems.length
       this.onProgress?.()

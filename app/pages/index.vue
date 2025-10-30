@@ -3,8 +3,10 @@ import iconGenshin from "~/assets/img/icon_genshin.png"
 import iconHsr from "~/assets/img/icon_hsr.png"
 import { GachaFetchApiError, GachaFetchClientError } from "~/types/errors.js"
 import type { GameType } from "~~/functions/constants.js"
+import { clearByGameFromDb, getLatestIdsFromDb } from "~/dexie/db.js"
 
 const snackbar = useSnackbar()
+const dialog = useDialog()
 const i18n = useI18n()
 const config = useConfigStore()
 const progress = useFetchProgressStore()
@@ -77,13 +79,19 @@ const getHistory = async () => {
       authkey,
       region,
       game: config.game,
-      latestIds: {}, // TODO
+      latestIds: await getLatestIdsFromDb(config.game),
       untilLatestRare: !fetchAllHistory.value,
     })
 
     config.urlRecord = {
       ...config.urlRecord,
       [config.game]: url.value,
+    }
+
+    if (progress.result && progress.result.length > 0) {
+      snackbar.show(i18n.t("historyFetched", { count: progress.result.length }))
+    } else {
+      snackbar.show(i18n.t("noNewHistory"))
     }
   } catch (e) {
     console.error(e)
@@ -99,7 +107,14 @@ const getHistory = async () => {
 }
 
 const clearHistory = () => {
-
+  dialog.show(
+    i18n.t("clearHistory"),
+    i18n.t("clearHistoryConfirm"),
+    async () => {
+      await clearByGameFromDb(config.game)
+      snackbar.show(i18n.t("historyCleared"))
+    },
+  )
 }
 </script>
 

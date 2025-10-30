@@ -95,8 +95,12 @@ fetchAllHistoryDesc: オンにすると過去6ヶ月（24ヶ月）の全ての�
 urlInput: URL入力
 getHistory: 履歴を取得
 clearHistory: 履歴をクリア
+clearHistoryConfirm: 履歴をクリアしますか？この操作は取り消せません。
+historyCleared: 履歴をクリアしました
 preparing: 履歴取得の準備をしています...
 progress: "{count} 件の{gacha}を取得しました（{current}/{total}）"
+historyFetched: "{count} 件の履歴を取得しました"
+noNewHistory: 新しい履歴はありません。引いたばかりの場合は、最長1時間後に再度お試しください。
 
 errors:
   invalidUrl: URLの形式が正しくありません。再度確認してください。

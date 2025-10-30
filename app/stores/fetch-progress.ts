@@ -1,6 +1,8 @@
 import { type FetchGachaLogRequest, FetchStatus } from "~~/functions/types.js"
 import { fetchEventSource } from "@microsoft/fetch-event-source"
 import { GachaFetchApiError, GachaFetchClientError } from "~/types/errors.js"
+import { toGachaLogEntry } from "~/types/db.js"
+import { db } from "~/dexie/db.js"
 
 export const useFetchProgressStore = defineStore("fetch-progress", {
   state: () => ({} as Partial<FetchStatus>),
@@ -8,6 +10,11 @@ export const useFetchProgressStore = defineStore("fetch-progress", {
     async fetch(request: FetchGachaLogRequest) {
       const updateState = (data: Partial<FetchStatus>) => {
         Object.assign(this, data)
+
+        if (data.status === "done" && data.result) {
+          const list = data.result.map(e => toGachaLogEntry(e, request.game))
+          db.gachaLogs.bulkAdd(list.toReversed())
+        }
       }
 
       await fetchEventSource("/api/fetch-gacha-log", {

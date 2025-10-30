@@ -11,6 +11,8 @@ export const GachaLogResponseItem = z.object({
   name: z.string(),
   rank_type: z.string(),
   item_type: z.enum(["Character", "Light Cone", "Weapon"] as const),
+  gacha_type: z.string(),
+  queryGachaType: z.string(),
   time: z.string(),
 })
 
@@ -28,7 +30,7 @@ export const FetchGachaLogRequest = z.object({
   game: z.enum(gameTypes),
   authkey: z.string().min(1),
   region: z.string().min(1),
-  endIds: z.record(z.string(), z.string()),
+  latestIds: z.record(z.string(), z.string()),
   untilLatestRare: z.boolean().optional().default(false),
 })
 export type FetchGachaLogRequest = z.infer<typeof FetchGachaLogRequest>
