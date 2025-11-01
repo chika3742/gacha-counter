@@ -17,6 +17,8 @@ export const useFetchProgressStore = defineStore("fetch-progress", {
         }
       }
 
+      updateState({ status: "processing" })
+
       await fetchEventSource("/api/fetch-gacha-log", {
         method: "POST",
         headers: {
