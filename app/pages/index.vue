@@ -169,7 +169,7 @@ const clearHistory = () => {
       <div class="mb-4">
         <v-checkbox
           v-model="fetchAllHistory"
-          :disabled="processing || history.value && history.value.length > 0"
+          :disabled="processing || !history.value || history.value.length > 0"
           :label="$t('fetchAllHistory')"
           color="primary"
           density="compact"
