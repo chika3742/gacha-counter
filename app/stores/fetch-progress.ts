@@ -27,6 +27,7 @@ export const useFetchProgressStore = defineStore("fetch-progress", {
         body: JSON.stringify(request),
         async onopen(resp) {
           if (!resp.ok) {
+            updateState({ status: "error" })
             throw new GachaFetchClientError(
               "errors.network",
               new Error(`Request failed with status ${resp.status} ${resp.statusText}`),
