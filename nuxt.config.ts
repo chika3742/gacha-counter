@@ -1,4 +1,4 @@
-import vuetify from "vite-plugin-vuetify"
+import vuetify, { transformAssetUrls } from "vite-plugin-vuetify"
 import * as fs from "node:fs"
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -21,17 +21,31 @@ export default defineNuxtConfig({
         // Google Fonts
         { rel: "preconnect", href: "https://fonts.googleapis.com" },
         { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" },
-        { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=M+PLUS+2:wght@100..900&display=swap" },
+        { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=M+PLUS+2:wght@100..900&family=Cairo:wght@200..1000&display=swap" },
+
+        { rel: "icon", href: "/favicon.webp" },
       ],
     },
   },
   css: ["~/assets/css/global.sass"],
+  runtimeConfig: {
+    public: {
+      builtAt: new Date().toISOString(),
+    },
+  },
   build: {
     transpile: ["vuetify"],
   },
   compatibilityDate: "2025-07-15",
   nitro: {
     preset: "cloudflare-pages-static",
+  },
+  vite: {
+    vue: {
+      template: {
+        transformAssetUrls,
+      },
+    },
   },
   typescript: {
     tsConfig: {
