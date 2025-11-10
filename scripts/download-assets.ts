@@ -18,7 +18,8 @@ const run = async () => {
   await Bun.$`git clone --depth 1 https://github.com/chika3742/hsr-material.git ${tempDir}/hsr-material`
 
   // download genshin material assets
-  const assetUrl = await Bun.$`curl "https://matnote-releases.chikach.net/releases/genshin?channel=prod" | jq -r ".[-1].distUrl"`
+  const assetInfoJson = (await Bun.$`curl "https://matnote-releases.chikach.net/releases/genshin?channel=prod"`).text()
+  const assetUrl = JSON.parse(assetInfoJson).slice(-1)[0].distUrl
   await Bun.$`curl ${assetUrl.text().trim()} -o ${tempDir}/gm-assets.zip`
   await Bun.$`unzip ${tempDir}/gm-assets.zip -d ${tempDir}/gm-assets > /dev/null`
   await fs.rm(`${tempDir}/gm-assets.zip`)
@@ -31,8 +32,13 @@ const run = async () => {
   await fs.cp(`${tempDir}/hsr-material/packages/nuxt/assets/img/characters`, `${assetsDir}/hsr/img/characters`, { recursive: true })
   await fs.cp(`${tempDir}/hsr-material/packages/nuxt/assets/img/light-cones`, `${assetsDir}/hsr/img/light-cones`, { recursive: true })
   await fs.mkdir(`${assetsDir}/hsr/data`, { recursive: true })
-  await Bun.$`yq -o json ${tempDir}/hsr-material/packages/nuxt/assets/data/characters.yaml > ${assetsDir}/hsr/data/characters.json`
-  await Bun.$`yq -o json ${tempDir}/hsr-material/packages/nuxt/assets/data/light-cones.yaml > ${assetsDir}/hsr/data/light-cones.json`
+  await fileToJson(`${tempDir}/hsr-material/packages/nuxt/assets/data/characters.yaml`, `${assetsDir}/hsr/data/characters.json`)
+  await fileToJson(`${tempDir}/hsr-material/packages/nuxt/assets/data/light-cones.yaml`, `${assetsDir}/hsr/data/light-cones.json`)
+}
+
+const fileToJson = async (input: string, output: string) => {
+  const parsed = Bun.YAML.parse(await Bun.file(input).text())
+  return await Bun.file(output).write(JSON.stringify(parsed))
 }
 
 void run()
