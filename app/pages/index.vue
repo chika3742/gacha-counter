@@ -3,7 +3,12 @@ import iconGenshin from "~/assets/img/icon_genshin.png"
 import iconHsr from "~/assets/img/icon_hsr.png"
 import { GachaFetchApiError, GachaFetchClientError } from "~/types/errors.js"
 import type { GameType } from "~~/functions/constants.js"
-import { clearByGameFromDb, getLatestIdsFromDb } from "~/dexie/db.js"
+import { clearByGameFromDb, db, getLatestIdsFromDb } from "~/dexie/db.js"
+import { useObservable } from "@vueuse/rxjs"
+import { liveQuery } from "dexie"
+import type { GachaLogEntry } from "~/types/db.js"
+import CounterRows from "~/components/CounterRows.vue"
+import { gachaTypes } from "~/constants.js"
 
 const snackbar = useSnackbar()
 const dialog = useDialog()
@@ -61,6 +66,13 @@ const progressText = computed(() => {
 })
 
 const processing = computed(() => !!progressText.value)
+
+const history = computed(() => {
+  const game = config.game
+  return useObservable<GachaLogEntry[]>(
+    liveQuery(() => db.gachaLogs.where({ game }).toArray()) as any,
+  )
+})
 
 const getHistory = async () => {
   let authkey: string, region: string
@@ -157,14 +169,14 @@ const clearHistory = () => {
       <div class="mb-4">
         <v-checkbox
           v-model="fetchAllHistory"
-          :disabled="processing || false"
+          :disabled="processing || history.value && history.value.length > 0"
           :label="$t('fetchAllHistory')"
           color="primary"
           density="compact"
           hide-details
         />
         <div style="font-size: 0.9em">
-          {{ $t('fetchAllHistoryDesc') }}
+          {{ $t(`fetchAllHistoryDesc_${config.game}`) }}
         </div>
       </div>
       <v-row
@@ -194,6 +206,15 @@ const clearHistory = () => {
         {{ progressText }}
       </div>
     </section>
+
+    <article>
+      <CounterRows
+        :entries="history.value ?? []"
+        :gacha-types="gachaTypes[config.game]"
+        :game="config.game"
+        :show-pity-history="fetchAllHistory"
+      />
+    </article>
   </div>
 </template>
 

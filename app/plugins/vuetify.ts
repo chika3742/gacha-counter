@@ -32,6 +32,8 @@ export default defineNuxtPlugin((nuxtApp) => {
             "rarity-3": "#3193e3",
             "card": "#3a3a3a",
             "slight-heading": "#bebebe",
+            "lucky": "#9cff7d",
+            "pity": "#ff6e6e",
           },
         },
         light: {

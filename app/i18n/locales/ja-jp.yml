@@ -19,6 +19,19 @@ placeholders:
     gacha: 跳躍
     historyOperation: 「跳躍」→「詳細を確認」→「跳躍履歴」
 
+gacha:
+  genshin:
+    eventCharacter: イベント祈願・キャラクター
+    eventWeapon: イベント祈願・武器
+    chronicled: 集録祈願
+    standard: 通常祈願
+  hsr:
+    eventCharacter: イベント跳躍・キャラクター
+    eventLightCone: イベント跳躍・光円錐
+    collabCharacter: コラボ跳躍・キャラクター
+    collabLightCone: コラボ跳躍・光円錐
+    standard: 通常跳躍
+
 about:
   title: このアプリについて
   content: |
@@ -91,7 +104,8 @@ howToGetUrl:
       1. 自動的にURLがコピーされ、スクリプトが終了します。
 
 fetchAllHistory: 天井カウントの履歴を表示
-fetchAllHistoryDesc: オンにすると過去6ヶ月（24ヶ月）の全ての履歴を取得し、天井カウントの履歴を確認できますが、初回の取得に時間がかかります。変更するには、履歴をクリアする必要があります。
+fetchAllHistoryDesc_genshin: オンにすると過去1年の全ての履歴を取得し、天井カウントの履歴を確認できますが、初回の取得に時間がかかります。変更するには、履歴をクリアする必要があります。
+fetchAllHistoryDesc_hsr: オンにすると過去6ヶ月（コラボ跳躍は24ヶ月）の全ての履歴を取得し、天井カウントの履歴を確認できますが、初回の取得に時間がかかります。変更するには、履歴をクリアする必要があります。
 urlInput: URL入力
 getHistory: 履歴を取得
 clearHistory: 履歴をクリア
@@ -102,6 +116,16 @@ progress: "{count} 件の{gacha}を取得しました（{current}/{total}）"
 historyFetched: "{count} 件の履歴を取得しました"
 noNewHistory: 新しい履歴はありません。引いたばかりの場合は、最長1時間後に再度お試しください。
 
+rarity: レアリティ
+itemName: アイテム名
+pityCount: 天井カウント
+dateTime: 日時
+noData: データがありません
+pityHistory: 天井カウントの履歴
+lastPulled: 最後に引いた☆{star}
+pityCountWithStar: "☆{star} 天井カウント"
+prob: ☆5 次の10連で引ける確率
+
 errors:
   invalidUrl: URLの形式が正しくありません。再度確認してください。
   invalidResponse: サーバーから無効な返答を受け取りました。しばらくしてから再度お試しください。
@@ -110,3 +134,5 @@ errors:
   invalidAuthKey: 無効なURLです。再度取得してください。
   tooManyRequests: サーバーへのリクエストが多すぎます。しばらくしてから再度お試しください。
   unknown: 不明なエラーが発生しました。しばらくしてから再度お試しください。
+
+unknown: 不明
