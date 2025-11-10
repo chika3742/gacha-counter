@@ -24,3 +24,6 @@ logs
 !.env.example
 
 .wrangler
+
+remote-assets
+app/assets/remote
