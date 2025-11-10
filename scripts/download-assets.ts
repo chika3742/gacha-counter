@@ -7,8 +7,12 @@ const run = async () => {
   // @ts-ignore
   const assetsDir = path.resolve(import.meta.dirname, "../app/assets/remote")
   // clean up
-  await fs.rm(tempDir, { recursive: true })
-  await fs.rm(assetsDir, { recursive: true })
+  try {
+    await fs.rm(tempDir, { recursive: true })
+  } catch { /* directory does not exist */ }
+  try {
+    await fs.rm(assetsDir, { recursive: true })
+  } catch { /* directory does not exist */ }
 
   // clone hsr-material repo
   await Bun.$`git clone --depth 1 https://github.com/chika3742/hsr-material.git ${tempDir}/hsr-material`
