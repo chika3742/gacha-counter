@@ -20,7 +20,7 @@ const run = async () => {
   // download genshin material assets
   const assetInfoJson = (await Bun.$`curl "https://matnote-releases.chikach.net/releases/genshin?channel=prod"`).text()
   const assetUrl = JSON.parse(assetInfoJson).slice(-1)[0].distUrl
-  await Bun.$`curl ${assetUrl.text().trim()} -o ${tempDir}/gm-assets.zip`
+  await Bun.$`curl ${assetUrl} -o ${tempDir}/gm-assets.zip`
   await Bun.$`unzip ${tempDir}/gm-assets.zip -d ${tempDir}/gm-assets > /dev/null`
   await fs.rm(`${tempDir}/gm-assets.zip`)
 
