@@ -1,1 +1,136 @@
-{}
+appName: Pity Counter
+
+ui:
+  ok: OK
+  cancel: Cancel
+  copied: Copied
+
+games:
+  genshin: Genshin Impact
+  hsr: "Honkai: Star Rail"
+
+placeholders:
+  genshin:
+    game: Genshin Impact
+    gacha: Wish
+    historyOperation: "**Wish** → **Wish History**"
+  hsr:
+    game: "Honkai: Star Rail"
+    gacha: Warp
+    historyOperation: "**Warp** → **Check Details** → **Warp History**"
+
+gacha:
+  genshin:
+    eventCharacter: Character Event Wish
+    eventWeapon: Weapon Event Wish
+    chronicled: Chronicled Wish
+    standard: Standard Wish
+  hsr:
+    eventCharacter: Character Event Warp
+    eventLightCone: Light Cone Event Warp
+    collabCharacter: Character Collaboration Warp
+    collabLightCone: Light Cone Collaboration Warp
+    standard: Standard Warp
+
+about:
+  title: About This App
+  content: |
+    ## About This Feature
+
+    This feature automatically fetches your {gacha} history from the game and shows the pity count. To use it, you need the URL obtained using one of the methods below.
+
+    ## About Safety
+
+    The URL used by this feature includes an access key permitted ONLY to retrieve your {gacha} history. It cannot be used to access personal information such as your email address or username, nor to log into the game. Rest assured.
+
+    ## Important Notes
+
+    - <span class="text-warning font-weight-bold">The URL expires after 24 hours. When it does, obtain a new one using the same method.</span>
+    - <span class="text-warning font-weight-bold">Currently there is no method to obtain the URL using only an Android device.</span>
+
+howToGetUrl:
+  windows:
+    title: How to Obtain URL (Windows)
+    contents: |
+      *Tested only on Windows 11.*
+
+      1. Launch {game} and navigate to {historyOperation}.
+      1. Press Windows + R to open the "Run" dialog.
+      1. Copy & paste the command below and press Enter.
+          <div id="cmd-win" class="d-flex flex-row-reverse align-center"><pre class="flex-grow-1"><code>{cmdline}</code></pre></div>
+      1. The URL will be copied to your clipboard; paste it into this page.
+    cmdline: |
+      {'powershell -Command "iex ""&{$(irm https://gist.githubusercontent.com/chika3742/0542db8a5e329fb15af9e37714e92893/raw/getlink.ps1)} global -lang en-US"""'}
+  ios:
+    title: How to Obtain URL (iOS)
+    contents: |
+      ### Preparation (Only needed first time)
+
+      1. Install the [Stream]({streamUrl}) app from the App Store.
+      1. Open Stream, tap "Sniff Now". When the dialog '"Stream" would like to add VPN configurations' appears, tap "Allow" (enter your passcode if prompted).
+      1. Back in Stream, when the "You must install CA" dialog appears, tap "Install CA" then "Install CA Certificate".
+      1. When the system says "This website is trying to download a configuration profile...", tap "Allow".
+      1. Open Settings: General > VPN & Device Management > Stream Generated CA ... > tap Install (top-right) > enter passcode > tap Install (top-right) > Install.
+      1. Return to the app. If "For iOS 10.3+ and iOS 11 ..." appears, tap the blue "I've trusted".
+      1. On the app's main screen, tap the green "Sniff Mode" at the bottom.
+      1. Turn on "Switch to Whitelist Mode" and tap "Whitelist Settings".
+      1. In the "Input domain to enable sniffing" textbox, enter (paste) "public-operation-hkrpg-sg.hoyoverse.com" and tap "Apply".
+      <div id="cmd-ios" class="d-flex flex-row-reverse align-center"><pre class="flex-grow-1"><code>{cmdline}</code></pre></div>
+
+      ### Obtaining the URL
+
+      1. Open Stream app and tap "Sniff Now".
+      1. Launch {game} and open {historyOperation}. (It is fine if sniffing starts at the point you tap "{gacha} History".)
+      1. Return to Stream, tap "Stop Sniffing", then tap "Sniff History" on the right.
+      1. Tap the top-most time entry, then tap the top item inside it.
+      1. Tap the "Request" tab at the top, tap the area under "REQUEST LINE", then tap "Copy Url" to copy the URL.
+  macos:
+    title: How to Obtain URL (macOS with PlayCover)
+    contents: |
+      ### Preparation (Only needed first time)
+
+      1. Install [Homebrew](https://brew.sh) and [mitmproxy](https://mitmproxy.org) beforehand.
+      1. Run the command below in Terminal. Enter your password when prompted.
+          <div id="cmd-macos-1" class="d-flex flex-row-reverse align-center"><pre class="flex-grow-1"><code>{cmdline1}</code></pre></div>
+          *This command trusts the certificate so HTTPS traffic can be inspected.*
+
+      ### Obtaining the URL
+
+      1. Run the command below in Terminal.
+          <div id="cmd-macos-2" class="d-flex flex-row-reverse align-center"><pre class="flex-grow-1"><code>{cmdline2}</code></pre></div>
+      1. Launch {game} and open {historyOperation}.
+      1. The URL will be copied automatically and the script will exit.
+
+fetchAllHistory: Show pity count history
+fetchAllHistoryDesc_genshin: When enabled, fetches all history from the past year so you can view pity count history. The first fetch takes time. To change this setting you must clear the history.
+fetchAllHistoryDesc_hsr: When enabled, fetches all history from the past 6 months (24 months for collaboration warps) so you can view pity count history. The first fetch takes time. To change this setting you must clear the history.
+urlInput: Enter URL
+getHistory: Fetch History
+clearHistory: Clear History
+clearHistoryConfirm: Clear history? This cannot be undone.
+historyCleared: History cleared.
+preparing: Preparing to fetch history...
+progress: "Fetched {count} {gacha} item(s) ({current}/{total})"
+historyFetched: "Fetched {count} history item(s)"
+noNewHistory: No new history. If you just pulled, try again in up to 1 hour.
+
+rarity: Rarity
+itemName: Item Name
+pityCount: Pity Count
+dateTime: Date/Time
+noData: No data
+pityHistory: Pity Count History
+lastPulled: Last pulled ☆{star}
+pityCountWithStar: "☆{star} pity count"
+prob: Chance to get a ☆5 in the next 10-pull
+
+errors:
+  invalidUrl: Invalid URL format. Please check again.
+  invalidResponse: Received an invalid response from the server. Please try again later.
+  network: A network error occurred. Please try again later.
+  authKeyTimeout: The URL has expired. Please obtain a new one.
+  invalidAuthKey: Invalid URL. Please obtain a new one.
+  tooManyRequests: Too many requests to the server. Please try again later.
+  unknown: An unknown error occurred. Please try again later.
+
+unknown: Unknown
