@@ -15,7 +15,7 @@ const run = async () => {
   } catch { /* directory does not exist */ }
 
   // clone hsr-material repo
-  await Bun.$`git clone --depth 1 https://github.com/chika3742/hsr-material.git ${tempDir}/hsr-material`
+  await Bun.$`git clone --depth 1 --branch live https://github.com/chika3742/hsr-material.git ${tempDir}/hsr-material`
 
   // download genshin material assets
   const assetInfoJson = await (await fetch("https://matnote-releases.chikach.net/releases/genshin?channel=prod")).text()
