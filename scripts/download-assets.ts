@@ -18,7 +18,7 @@ const run = async () => {
   await Bun.$`git clone --depth 1 https://github.com/chika3742/hsr-material.git ${tempDir}/hsr-material`
 
   // download genshin material assets
-  const assetInfoJson = (await Bun.$`curl "https://matnote-releases.chikach.net/releases/genshin?channel=prod"`).text()
+  const assetInfoJson = await (await fetch("https://matnote-releases.chikach.net/releases/genshin?channel=prod")).text()
   const assetUrl = JSON.parse(assetInfoJson).slice(-1)[0].distUrl
   await Bun.$`curl ${assetUrl} -o ${tempDir}/gm-assets.zip`
   await Bun.$`unzip ${tempDir}/gm-assets.zip -d ${tempDir}/gm-assets > /dev/null`
@@ -38,7 +38,7 @@ const run = async () => {
 
 const fileToJson = async (input: string, output: string) => {
   const parsed = Bun.YAML.parse(await Bun.file(input).text())
-  return await Bun.file(output).write(JSON.stringify(parsed))
+  return await Bun.write(output, JSON.stringify(parsed))
 }
 
 void run()
