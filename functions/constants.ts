@@ -14,11 +14,11 @@ export const gachaTypeRecord: Record<GameType, GachaTypeMeta[]> = {
       apiEndpoint: hsrEp,
     },
     {
-      id: "21",
+      id: "12",
       apiEndpoint: hsrEp,
     },
     {
-      id: "12",
+      id: "21",
       apiEndpoint: hsrLdEp,
     },
     {
