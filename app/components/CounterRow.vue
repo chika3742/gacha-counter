@@ -61,7 +61,7 @@
         <div class="card__bar card__bar--rank5" />
       </v-card>
 
-      <v-card v-if="gachaType.offBannerItems.length > 0">
+      <v-card v-if="showPityHistory && gachaType.offBannerItems.length > 0">
         <div class="card">
           <h4>{{ i18n.t("offBannerRate") }}</h4>
           <div
