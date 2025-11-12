@@ -1,6 +1,21 @@
 <script setup lang="ts">
 const snackbar = useSnackbar()
 const dialog = useDialog()
+const i18n = useI18n()
+const { $config } = useNuxtApp()
+
+useHead({
+  titleTemplate: `${i18n.t("appName")} - %s`,
+})
+useSeoMeta({
+  description: i18n.t("seo.description"),
+  ogTitle: i18n.t("appName"),
+  ogDescription: i18n.t("seo.description"),
+  ogType: "website",
+  ogUrl: $config.public.host,
+  ogImage: `${$config.public.host}/og-image.webp`,
+  twitterCard: "summary_large_image",
+})
 </script>
 
 <template>

@@ -1,5 +1,8 @@
 appName: Pity Counter
 
+seo:
+  description: "An app that automatically fetches gacha history for Genshin Impact / Honkai: Star Rail and displays pity counts and their history."
+
 ui:
   ok: OK
   cancel: Cancel

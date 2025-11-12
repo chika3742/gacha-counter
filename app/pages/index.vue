@@ -16,6 +16,10 @@ const i18n = useI18n()
 const config = useConfigStore()
 const progress = useFetchProgressStore()
 
+useHead({
+  title: computed(() => i18n.t(`games.${config.game}`)),
+})
+
 const games = [
   {
     name: i18n.t("games.genshin"),

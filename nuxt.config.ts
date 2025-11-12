@@ -31,6 +31,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       builtAt: new Date().toISOString(),
+      host: "https://gc.chikach.net",
     },
   },
   build: {
