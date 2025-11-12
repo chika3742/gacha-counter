@@ -25,6 +25,9 @@ const commonRules = {
   "no-useless-constructor": "off",
   "vue/multi-word-component-names": "off",
   "vue/no-v-html": "off",
+  "vue/valid-v-slot": ["error", {
+    allowModifiers: true,
+  }],
   "import/named": "off",
   "no-use-before-define": "off",
   "@typescript-eslint/ban-ts-comment": "off",

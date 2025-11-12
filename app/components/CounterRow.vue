@@ -1,3 +1,5 @@
+<!-- eslint-disable-next-line vue/html-comment-content-spacing -->
+<!--suppress VueUnrecognizedSlot -->
 <template>
   <div>
     <v-row
@@ -54,6 +56,25 @@
           <h4>{{ i18n.t("prob") }}</h4>
           <div class="card__content">
             <span>{{ (rank5Prob * 100).toFixed(2) }}</span>%
+          </div>
+        </div>
+        <div class="card__bar card__bar--rank5" />
+      </v-card>
+
+      <v-card v-if="gachaType.offBannerItems.length > 0">
+        <div class="card">
+          <h4>{{ i18n.t("☆5 すり抜け率") }}</h4>
+          <div
+            v-if="rank5OffBannerRate !== null"
+            class="card__content"
+          >
+            <span>{{ (rank5OffBannerRate * 100).toFixed(2) }}</span>%
+          </div>
+          <div
+            v-else
+            class="card__content"
+          >
+            {{ $t("データ不足") }}
           </div>
         </div>
         <div class="card__bar card__bar--rank5" />
@@ -120,13 +141,16 @@
             </template>
 
             <template #item.name="{ item, value }">
-              <div class="d-flex align-center ga-3">
+              <div class="d-flex align-center ga-2">
                 <AsyncImg
                   :key="item.importImageUrl"
                   :src="item.importImageUrl"
                   size="35px"
                 />
                 <span>{{ value }}</span>
+                <v-icon v-if="item.offBanner">
+                  mdi-emoticon-sad
+                </v-icon>
               </div>
             </template>
 
@@ -174,6 +198,7 @@ export interface PityCountListItem {
   count: number | null
   countColorClass?: string
   offBanner: boolean
+  isDefinitive: boolean | null
   dateTime: DateTime
   importImageUrl: string | undefined
 }
@@ -198,25 +223,31 @@ const pityCounts = computed(() => {
     5: 0,
   }
 
+  let definitive = false
   for (const entry of props.entries) {
     for (const key of Object.keys(pityCount)) {
       pityCount[key]!++
     }
 
     const name = getItemName(entry)?.[i18n.locale.value] ?? i18n.t("unknown")
-    result.push({
+    const item: PityCountListItem = {
       entryId: entry.remoteId,
       name,
       type: entry.itemType,
       count: pityCount[entry.rankType] ?? null,
       countColorClass: getNumberColorClass(pityCount[entry.rankType], entry.rankType, props.gachaType.star5PseudoPityBorder),
       offBanner: props.gachaType.offBannerItems.includes(getItemId(entry) ?? ""),
+      isDefinitive: entry.rankType === "5" ? definitive : null,
       dateTime: DateTime.fromFormat(entry.time, "yyyy-MM-dd HH:mm:ss"),
       rank: entry.rankType,
       importImageUrl: getItemImage(entry),
-    })
+    }
+    result.push(item)
     if (entry.rankType !== "3") {
       pityCount[entry.rankType] = 0
+    }
+    if (entry.rankType === "5") {
+      definitive = item.offBanner
     }
   }
 
@@ -257,6 +288,18 @@ const rank5Prob = computed(() => {
     }
     return 1 - prob
   }
+})
+
+const rank5OffBannerRate = computed(() => {
+  const consideredRank5 = pityCounts.value.list.filter(e => e.rank === "5" && e.isDefinitive === false)
+  if (consideredRank5.length < 2) {
+    return null
+  }
+  if (!consideredRank5.slice(-1)[0]!.offBanner) {
+    consideredRank5.pop()
+  }
+  const offBannerRank5 = consideredRank5.filter(e => e.offBanner).length
+  return offBannerRank5 / consideredRank5.length
 })
 
 const getNumberColorClass = (count: number | undefined, rank: string, pseudoPityBorder: number) => {

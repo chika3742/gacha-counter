@@ -41,7 +41,19 @@ about:
 
     ## About Safety
 
-    The URL used by this feature includes an access key permitted ONLY to retrieve your {gacha} history. It cannot be used to access personal information such as your email address or username, nor to log into the game. Rest assured.
+    The URL used by this feature includes an access key permitted ONLY to retrieve your __{gacha} history__. It cannot be used to access personal information such as your email address or username, nor to log into the game. Rest assured.
+    
+    ## About Probability Calculation
+    
+    "Chance to get a ☆5 in the next 10-pull" refers to the probability that, based on the number of attempts since the last ☆5 drop, you will get at least one ☆5 within the next 10 attempts.
+    This calculation takes into account the "soft pity" (increased probability from the 74th attempt onward) known from community statistics for Genshin Impact ([Reference](https://gachaguide.com/genshin_probabilities)).
+    On this site, we assume a similar increase exists in Honkai: Star Rail and compute accordingly.
+    
+    ## About Off-banner Rate Calculation
+    
+    To display the off-banner rate (how often you "lose the 50/50"), you need to enable the pity count history.
+    The off-banner rate is calculated when there are at least __2 or more__ recorded ☆5 drops in the history.
+    If the oldest ☆5 drop record was not off-banner (i.e., it was the featured item), that record is __excluded__ from the calculation.
 
     ## Important Notes
 
