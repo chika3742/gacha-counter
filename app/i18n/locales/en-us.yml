@@ -89,8 +89,9 @@ howToGetUrl:
       1. Return to the app. If "For iOS 10.3+ and iOS 11 ..." appears, tap the blue "I've trusted".
       1. On the app's main screen, tap the green "Sniff Mode" at the bottom.
       1. Turn on "Switch to Whitelist Mode" and tap "Whitelist Settings".
-      1. In the "Input domain to enable sniffing" textbox, enter (paste) "public-operation-hkrpg-sg.hoyoverse.com" and tap "Apply".
-      <div id="cmd-ios" class="d-flex flex-row-reverse align-center"><pre class="flex-grow-1"><code>{cmdline}</code></pre></div>
+      1. In the "Input domain to enable sniffing" textbox, enter (paste) "{urlPrefix}" and tap "Apply".
+         <span class="text-warning">Note: This domain varies depending on the game. If you play multiple games, add each one.</span>
+         <div id="cmd-ios" class="d-flex flex-row-reverse align-center"><pre class="flex-grow-1"><code>{urlPrefix}</code></pre></div>
 
       ### Obtaining the URL
 

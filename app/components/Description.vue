@@ -23,7 +23,10 @@ const streamUrl = "https://apps.apple.com/app/stream/id1312141691"
 const cmdlineWin = i18n.t("howToGetUrl.windows.cmdline")
 const cmdlineMacos1 = "curl \"https://gist.githubusercontent.com/chika3742/3a65b7530c021b9ac631408b033edc4f/raw/install-ca.sh\" | bash"
 const cmdlineMacos2 = "curl \"https://gist.githubusercontent.com/chika3742/3a65b7530c021b9ac631408b033edc4f/raw/run.sh\" | bash"
-const cmdlineIos = "public-operation-hkrpg-sg.hoyoverse.com"
+const urlPrefix = computed(() => ({
+  genshin: "public-operation-hk4e-sg.hoyoverse.com",
+  hsr: "public-operation-hkrpg-sg.hoyoverse.com",
+}[props.game] ?? ""))
 </script>
 
 <template>
@@ -54,12 +57,12 @@ const cmdlineIos = "public-operation-hkrpg-sg.hoyoverse.com"
       <v-expansion-panel-title>{{ $t("howToGetUrl.ios.title") }}</v-expansion-panel-title>
       <v-expansion-panel-text eager>
         <client-only>
-          <div v-html="marked.parse(i18n.t('howToGetUrl.ios.contents', { streamUrl, cmdline: cmdlineIos, ...phContents }))" />
+          <div v-html="marked.parse(i18n.t('howToGetUrl.ios.contents', { streamUrl, urlPrefix, ...phContents }))" />
           <teleport
             :key="game + '-ios'"
             to="#cmd-ios"
           >
-            <CopyBtn :copy-text="cmdlineIos" />
+            <CopyBtn :copy-text="urlPrefix" />
           </teleport>
         </client-only>
       </v-expansion-panel-text>
