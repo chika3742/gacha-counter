@@ -140,6 +140,8 @@ pityHistory: 天井カウントの履歴
 lastPulled: 最後に引いた☆{star}
 pityCountWithStar: "☆{star} 天井カウント"
 prob: ☆5 次の10連で引ける確率
+offBannerRate: ☆5 すり抜け率
+notEnoughData: データ不足
 
 errors:
   invalidUrl: URLの形式が正しくありません。再度確認してください。

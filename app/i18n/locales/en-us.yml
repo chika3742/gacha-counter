@@ -138,6 +138,8 @@ pityHistory: Pity Count History
 lastPulled: Last pulled ☆{star}
 pityCountWithStar: "☆{star} pity count"
 prob: Chance to get a ☆5 in the next 10-pull
+offBannerRate: ☆5 Off-banner Rate
+notEnoughData: Not enough data
 
 errors:
   invalidUrl: Invalid URL format. Please check again.

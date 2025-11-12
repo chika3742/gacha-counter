@@ -63,7 +63,7 @@
 
       <v-card v-if="gachaType.offBannerItems.length > 0">
         <div class="card">
-          <h4>{{ i18n.t("☆5 すり抜け率") }}</h4>
+          <h4>{{ i18n.t("offBannerRate") }}</h4>
           <div
             v-if="rank5OffBannerRate !== null"
             class="card__content"
@@ -74,7 +74,7 @@
             v-else
             class="card__content"
           >
-            {{ $t("データ不足") }}
+            {{ $t("notEnoughData") }}
           </div>
         </div>
         <div class="card__bar card__bar--rank5" />
