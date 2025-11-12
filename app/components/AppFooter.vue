@@ -7,7 +7,8 @@ const repositoryUrl = "https://github.com/chika3742/gacha-counter"
 <template>
   <v-footer v-safe-area="{ left: true, bottom: 8, right: true }">
     <div class="d-flex flex-column w-100 ga-4">
-      <div class="d-flex px-4 ga-4">
+      <!-- Links to gmn and hsrmn -->
+      <div class="d-flex flex-wrap px-4 ga-4">
         <v-btn
           variant="tonal"
           href="https://onelink.to/n5xsnp"
@@ -37,12 +38,13 @@ const repositoryUrl = "https://github.com/chika3742/gacha-counter"
           崩壊：スターレイル 素材ノート
         </v-btn>
       </div>
+
       <div class="d-flex align-center justify-end">
         <span
           class="ml-4"
           style="font-size: 0.8rem"
         >
-          &copy;cq 2025 | built at {{ new Date($config.public.builtAt).toLocaleString() }}
+          &copy;cq 2025 | built at <client-only>{{ new Date($config.public.builtAt).toLocaleString() }}</client-only>
         </span>
         <v-spacer />
         <v-btn
