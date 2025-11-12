@@ -13,6 +13,7 @@ export const GachaLogResponseItem = z.object({
   item_type: z.enum(["Character", "Light Cone", "Weapon"] as const),
   gacha_type: z.string(),
   queryGachaType: z.string(),
+  uid: z.string(),
   time: z.string(),
 })
 
@@ -31,6 +32,7 @@ export const FetchGachaLogRequest = z.object({
   authkey: z.string().min(1),
   region: z.string().min(1),
   latestIds: z.record(z.string(), z.string()),
+  uid: z.string().nullable(),
   untilLatestRare: z.boolean().optional().default(false),
 })
 export type FetchGachaLogRequest = z.infer<typeof FetchGachaLogRequest>
@@ -42,6 +44,9 @@ export const FetchStatus = z.object({
     z.object({
       type: z.literal("remote-api-error"),
       retcode: z.number().optional(),
+    }),
+    z.object({
+      type: z.literal("uid-mismatch"),
     }),
     z.object({
       type: z.literal("unknown"),

@@ -3,7 +3,7 @@ import iconGenshin from "~/assets/img/icon_genshin.png"
 import iconHsr from "~/assets/img/icon_hsr.png"
 import { GachaFetchApiError, GachaFetchClientError } from "~/types/errors.js"
 import type { GameType } from "~~/functions/constants.js"
-import { clearByGameFromDb, db, getLatestIdsFromDb } from "~/dexie/db.js"
+import { clearByGameFromDb, db, getLatestIdsFromDb, getUidFromDb } from "~/dexie/db.js"
 import { useObservable } from "@vueuse/rxjs"
 import { liveQuery } from "dexie"
 import type { GachaLogEntry } from "~/types/db.js"
@@ -97,6 +97,7 @@ const getHistory = async () => {
       game: config.game,
       latestIds: await getLatestIdsFromDb(config.game),
       untilLatestRare: !fetchAllHistory.value,
+      uid: await getUidFromDb(config.game),
     })
 
     config.urlRecord = {

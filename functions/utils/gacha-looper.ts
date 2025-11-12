@@ -8,7 +8,8 @@ export class GachaLooper {
   constructor(
     public readonly api: GachaApi,
     public readonly gachaTypes: GachaTypeMeta[],
-    public readonly untilLatestRare: boolean = false,
+    public readonly untilLatestRare: boolean,
+    public readonly uid: string | undefined,
   ) {
     this.totalGachaTypes = gachaTypes.length
   }
@@ -26,6 +27,9 @@ export class GachaLooper {
       const response = await this.api.getGachaLog(type, _endId)
       if (response.retcode !== 0) {
         throw new GachaApiError(response)
+      }
+      if (response.data.list.length > 0 && this.uid && response.data.list[0].uid !== this.uid) {
+        throw new UidMismatchError()
       }
       const newItems = takeWhile(response.data.list, item => item.id !== latestId)
         .map(item => ({
@@ -69,5 +73,11 @@ export class GachaLooper {
 export class GachaApiError extends Error {
   constructor(public readonly response: GachaLogResponse) {
     super()
+  }
+}
+
+export class UidMismatchError extends Error {
+  constructor() {
+    super("UID mismatch")
   }
 }

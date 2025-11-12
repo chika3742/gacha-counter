@@ -9,6 +9,7 @@ export interface GachaLogEntry {
   itemType: "Character" | "Light Cone" | "Weapon"
   gachaType: string
   queryGachaType: string
+  uid: string
   time: string
   game: GameType
 }
@@ -21,5 +22,6 @@ export const toGachaLogEntry = (from: GachaLogResponseItem, game: GameType): Omi
   time: from.time,
   gachaType: from.gacha_type,
   queryGachaType: from.queryGachaType,
+  uid: from.uid,
   game,
 })

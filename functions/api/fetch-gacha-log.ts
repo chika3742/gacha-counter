@@ -1,5 +1,5 @@
 import { GachaApi } from "../utils/gacha-api.js"
-import { GachaApiError, GachaLooper } from "../utils/gacha-looper.js"
+import { GachaApiError, GachaLooper, UidMismatchError } from "../utils/gacha-looper.js"
 import { gachaTypeRecord } from "../constants.js"
 import type { FetchStatus } from "../types.js"
 import { FetchGachaLogRequest } from "../types.js"
@@ -26,7 +26,7 @@ export const onRequest: PagesFunction = async (context) => {
   }
 
   const api = new GachaApi(request.authkey, request.region)
-  const looper = new GachaLooper(api, gachaTypeRecord[request.game], request.untilLatestRare)
+  const looper = new GachaLooper(api, gachaTypeRecord[request.game], request.untilLatestRare, request.uid)
 
   looper.onProgress = () => {
     sendStatus({
@@ -53,6 +53,10 @@ export const onRequest: PagesFunction = async (context) => {
         error = {
           type: "remote-api-error",
           retcode: e.response.retcode,
+        }
+      } else if (e instanceof UidMismatchError) {
+        error = {
+          type: "uid-mismatch",
         }
       } else {
         console.error(e)

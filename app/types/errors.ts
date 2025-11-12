@@ -6,17 +6,21 @@ export class GachaFetchApiError extends Error {
   }
 
   get messageI18nKey() {
-    if (this.errorResponse.type === "unknown") {
-      return "errors.unknown"
-    }
-    switch (this.errorResponse.retcode) {
-      case -101:
-        return "errors.authKeyTimeout"
-      case -100:
-        return "errors.invalidAuthKey"
-      case -110:
-        return "errors.tooManyRequests"
-      default:
+    switch (this.errorResponse.type) {
+      case "remote-api-error":
+        switch (this.errorResponse.retcode) {
+          case -101:
+            return "errors.authKeyTimeout"
+          case -100:
+            return "errors.invalidAuthKey"
+          case -110:
+            return "errors.tooManyRequests"
+          default:
+            return "errors.unknown"
+        }
+      case "uid-mismatch":
+        return "errors.uidMismatch"
+      case "unknown":
         return "errors.unknown"
     }
   }

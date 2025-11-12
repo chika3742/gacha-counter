@@ -148,6 +148,7 @@ errors:
   authKeyTimeout: The URL has expired. Please obtain a new one.
   invalidAuthKey: Invalid URL. Please obtain a new one.
   tooManyRequests: Too many requests to the server. Please try again later.
+  uidMismatch: The UID associated with the URL does not match the game account. Please check your game account or clear the history.
   unknown: An unknown error occurred. Please try again later.
 
 unknown: Unknown
