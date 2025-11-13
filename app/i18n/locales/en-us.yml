@@ -72,8 +72,9 @@ howToGetUrl:
 
       1. Launch {game} and navigate to {historyOperation}.
       1. Press Windows + R to open the "Run" dialog.
-      1. Copy & paste the command below and press Enter.
-          <div id="cmd-win" class="d-flex flex-row-reverse align-center"><pre class="flex-grow-1"><code>{cmdline}</code></pre></div>
+      1. Copy & paste the command below and press Enter. If it succeeds, a dialog will appear.
+         <div id="cmd-win" class="d-flex flex-row-reverse align-center"><pre class="flex-grow-1"><code>{cmdline}</code></pre></div>
+         <span class="text-warning">Note: This script may not succeed the first time due to Microsoft Defender scan. In that case, run it again.</span>
       1. The URL will be copied to your clipboard; paste it into this page.
     cmdline: |
       {'powershell -Command "iex ""&{$(irm https://gist.githubusercontent.com/chika3742/0542db8a5e329fb15af9e37714e92893/raw/getlink.ps1)} global -lang en-US"""'}

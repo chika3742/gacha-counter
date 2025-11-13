@@ -19,8 +19,16 @@ const phContents = computed(() => {
   }, {} as Record<string, string>)
 })
 
+const localeWindowsCmdMap = {
+  ja: "ja-JP",
+  en: "en-US",
+}
+
 const streamUrl = "https://apps.apple.com/app/stream/id1312141691"
-const cmdlineWin = i18n.t("howToGetUrl.windows.cmdline")
+const cmdlineWin = computed(() => ({
+  genshin: `powershell -Command "iex ""&{$(irm https://gist.githubusercontent.com/chika3742/83d0dacde0d5ba1d50d814fac9900e00/raw/getlink-genshin.ps1)} -lang ${localeWindowsCmdMap[i18n.locale.value]}"""`,
+  hsr: `powershell -Command "iex ""&{$(irm https://gist.githubusercontent.com/chika3742/0542db8a5e329fb15af9e37714e92893/raw/getlink.ps1)} -lang ${localeWindowsCmdMap[i18n.locale.value]}"""`,
+}[props.game] ?? ""))
 const cmdlineMacos1 = "curl \"https://gist.githubusercontent.com/chika3742/3a65b7530c021b9ac631408b033edc4f/raw/install-ca.sh\" | bash"
 const cmdlineMacos2 = "curl \"https://gist.githubusercontent.com/chika3742/3a65b7530c021b9ac631408b033edc4f/raw/run.sh\" | bash"
 const urlPrefix = computed(() => ({
