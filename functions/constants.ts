@@ -1,5 +1,7 @@
 import type { GachaTypeMeta } from "./types.js"
 
+export const requestSchemaVersion = 2
+
 const genshinEp = "https://public-operation-hk4e-sg.hoyoverse.com/gacha_info/api/getGachaLog"
 const hsrEp = "https://public-operation-hkrpg-sg.hoyoverse.com/common/gacha_record/api/getGachaLog"
 const hsrLdEp = "https://public-operation-hkrpg-sg.hoyoverse.com/common/gacha_record/api/getLdGachaLog"

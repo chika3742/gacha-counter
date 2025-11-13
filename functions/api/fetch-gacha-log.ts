@@ -25,7 +25,7 @@ export const onRequest: PagesFunction = async (context) => {
     return new Response("Bad Request", { status: 400 })
   }
 
-  const api = new GachaApi(request.authkey, request.region)
+  const api = new GachaApi(request.authkey, request.region, request.gameBiz)
   const looper = new GachaLooper(api, gachaTypeRecord[request.game], request.untilLatestRare, request.uid)
 
   looper.onProgress = () => {

@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { gameTypes } from "./constants.js"
+import { gameTypes, requestSchemaVersion } from "./constants.js"
 
 export interface GachaTypeMeta {
   id: string
@@ -28,9 +28,11 @@ export interface GachaLogResponse {
 }
 
 export const FetchGachaLogRequest = z.object({
+  requestSchemaVersion: z.literal(requestSchemaVersion),
   game: z.enum(gameTypes),
   authkey: z.string().min(1),
   region: z.string().min(1),
+  gameBiz: z.string().min(1),
   latestIds: z.record(z.string(), z.string()),
   uid: z.string().nullable(),
   untilLatestRare: z.boolean().optional().default(false),

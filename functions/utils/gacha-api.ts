@@ -4,6 +4,7 @@ export class GachaApi {
   constructor(
     public readonly authKey: string,
     public readonly region: string,
+    public readonly gameBiz: string,
   ) {}
 
   static itemsPerPage = 20
@@ -14,7 +15,7 @@ export class GachaApi {
       sign_type: "2",
       auth_appid: "webview_gacha",
       lang: "en",
-      game_biz: "hkrpg_global",
+      game_biz: this.gameBiz,
       size: GachaApi.itemsPerPage.toString(),
       authkey: this.authKey,
       region: this.region,

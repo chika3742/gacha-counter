@@ -15,12 +15,14 @@ export const parseKeyUrl = (url: string, game: GameType) => {
 
   const authkey = params.get("authkey")
   const region = params.get("region")
-  if (!authkey || !region) {
+  const gameBiz = params.get("game_biz")
+  if (!authkey || !region || !gameBiz) {
     throw new Error("Invalid URL: missing authkey or region")
   }
 
   return {
     authkey,
     region,
+    gameBiz,
   }
 }

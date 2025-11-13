@@ -2,7 +2,7 @@
 import iconGenshin from "~/assets/img/icon_genshin.png"
 import iconHsr from "~/assets/img/icon_hsr.png"
 import { GachaFetchApiError, GachaFetchClientError } from "~/types/errors.js"
-import type { GameType } from "~~/functions/constants.js"
+import { type GameType, requestSchemaVersion } from "~~/functions/constants.js"
 import { clearByGameFromDb, db, getLatestIdsFromDb, getUidFromDb } from "~/dexie/db.js"
 import { useObservable } from "@vueuse/rxjs"
 import { liveQuery } from "dexie"
@@ -79,9 +79,9 @@ const history = computed(() => {
 })
 
 const getHistory = async () => {
-  let authkey: string, region: string
+  let authkey: string, region: string, gameBiz: string
   try {
-    ({ authkey, region } = parseKeyUrl(url.value, config.game))
+    ({ authkey, region, gameBiz } = parseKeyUrl(url.value, config.game))
   } catch (e) {
     console.warn(e)
     urlError.value = i18n.t("errors.invalidUrl")
@@ -92,8 +92,10 @@ const getHistory = async () => {
 
   try {
     await progress.fetch({
+      requestSchemaVersion,
       authkey,
       region,
+      gameBiz,
       game: config.game,
       latestIds: await getLatestIdsFromDb(config.game),
       untilLatestRare: !fetchAllHistory.value,
