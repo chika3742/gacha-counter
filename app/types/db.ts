@@ -6,12 +6,13 @@ export interface GachaLogEntry {
   remoteId: string
   name: string
   rankType: string
-  itemType: "Character" | "Light Cone" | "Weapon"
+  itemType: GachaLogResponseItem["item_type"]
   gachaType: string
   queryGachaType: string
   uid: string
   time: string
   game: GameType
+  lang: string
 }
 
 export const toGachaLogEntry = (from: GachaLogResponseItem, game: GameType): Omit<GachaLogEntry, "id"> => ({
@@ -23,5 +24,6 @@ export const toGachaLogEntry = (from: GachaLogResponseItem, game: GameType): Omi
   gachaType: from.gacha_type,
   queryGachaType: from.queryGachaType,
   uid: from.uid,
+  lang: from.lang,
   game,
 })

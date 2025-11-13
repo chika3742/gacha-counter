@@ -2,6 +2,7 @@
 import type { GachaType } from "~/types/gacha-type.js"
 import type { GameType } from "~~/functions/constants.js"
 import type { GachaLogEntry } from "~/types/db.js"
+import { rarityMetaRecord } from "~/constants.js"
 
 interface Props {
   gachaTypes: GachaType[]
@@ -31,6 +32,7 @@ const gachaTypeEntries = computed<Record<string, GachaLogEntry[]>>(() => {
       </h2>
       <CounterRow
         :entries="gachaTypeEntries?.[gachaType.id] ?? []"
+        :rarity-meta="rarityMetaRecord[game]"
         :gacha-type="gachaType"
         :show-pity-history="showPityHistory"
       />

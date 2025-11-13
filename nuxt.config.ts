@@ -53,6 +53,8 @@ export default defineNuxtConfig({
       exclude: [
         "../functions/**/*",
       ],
+      compilerOptions: {
+      },
     },
   },
   hooks: {

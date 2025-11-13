@@ -1,5 +1,5 @@
 import { GachaApi } from "./gacha-api.js"
-import type { FetchGachaLogRequest, GachaLogResponse, GachaLogResponseItem, GachaTypeMeta } from "../types.js"
+import type { FetchGachaLogRequest, GachaLogResponse, GachaLogResponseItem, GachaTypeMeta, GameMeta } from "../types.js"
 import { takeWhile } from "es-toolkit"
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
@@ -8,8 +8,10 @@ export class GachaLooper {
   constructor(
     public readonly api: GachaApi,
     public readonly gachaTypes: GachaTypeMeta[],
+    public readonly gameMeta: GameMeta,
     public readonly untilLatestRare: boolean,
-    public readonly uid: string | undefined,
+    public readonly uid: string | null,
+    public readonly lang: string | null,
   ) {
     this.totalGachaTypes = gachaTypes.length
   }
@@ -24,7 +26,12 @@ export class GachaLooper {
     let _endId = "0"
 
     while (true) {
-      const response = await this.api.getGachaLog(type, _endId)
+      const response = await this.api.getGachaLog(
+        type,
+        _endId,
+        this.gameMeta.respectLang ? this.lang : "en",
+        this.gameMeta.queryKey,
+      )
       if (response.retcode !== 0) {
         throw new GachaApiError(response)
       }
@@ -40,7 +47,7 @@ export class GachaLooper {
       this.fetchedCount += newItems.length
       this.onProgress?.()
 
-      if (this.untilLatestRare && GachaLooper.containsRareItems(result)) {
+      if (this.untilLatestRare && this.containsRareItems(result)) {
         break
       }
       if (newItems.length < GachaApi.itemsPerPage) {
@@ -64,9 +71,9 @@ export class GachaLooper {
     return result
   }
 
-  private static containsRareItems(items: GachaLogResponseItem[]) {
-    return items.some(e => e.rank_type === "4")
-      && items.some(e => e.rank_type === "5")
+  private containsRareItems(items: GachaLogResponseItem[]) {
+    return items.some(e => e.rank_type === this.gameMeta.lowerRankType)
+      && items.some(e => e.rank_type === this.gameMeta.upperRankType)
   }
 }
 

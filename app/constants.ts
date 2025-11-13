@@ -15,6 +15,12 @@ const offBannerHsrLC = [
   "night-on-the-milky-way", "something-irreplaceable", "but-the-battle-isnt-over",
   "in-the-name-of-the-world", "moment-of-victory", "sleep-like-the-dead", "time-waits-for-no-one",
 ]
+const offBannerZzzAgents = [
+  "Nekomata", "Soldier 11", "Koleda", "Lycaon", "Grace", "Rina",
+]
+const offBannerZzzWEngines = [
+  "Steel Cushion", "The Brimstone", "Hellfire Gears", "The Restrained", "Fusion Compiler", "Weeping Cradle",
+]
 
 export const gachaTypes: Record<GameType, GachaType[]> = {
   genshin: [
@@ -93,4 +99,106 @@ export const gachaTypes: Record<GameType, GachaType[]> = {
       offBannerItems: [],
     },
   ],
+  zzz: [
+    {
+      id: "2",
+      title: "gacha.zzz.exclusiveChannel",
+      star5Pity: 90,
+      star5PseudoPityBorder: 74,
+      singleProb: 0.006,
+      offBannerItems: offBannerZzzAgents,
+    },
+    {
+      id: "3",
+      title: "gacha.zzz.wEngineChannel",
+      star5Pity: 80,
+      star5PseudoPityBorder: 64,
+      singleProb: 0.01,
+      offBannerItems: offBannerZzzWEngines,
+    },
+    {
+      id: "1",
+      title: "gacha.zzz.stableChannel",
+      star5Pity: 90,
+      star5PseudoPityBorder: 74,
+      singleProb: 0.006,
+      offBannerItems: [],
+    },
+    {
+      id: "5",
+      title: "gacha.zzz.bangbooChannel",
+      star5Pity: 80,
+      star5PseudoPityBorder: 64,
+      singleProb: 0.01,
+      offBannerItems: [],
+    },
+  ],
+}
+
+export interface RarityMeta {
+  rankTypes: {
+    rankType: string
+    colorClass: string
+    text: string
+  }[]
+  rareRankTypes: string[]
+  lowerRankType: string
+  upperRankType: string
+}
+
+const genshinAndHsr: RarityMeta = {
+  rankTypes: [
+    {
+      rankType: "3",
+      colorClass: "text-rarity-3",
+      text: "☆3",
+    },
+    {
+      rankType: "4",
+      colorClass: "text-rarity-4",
+      text: "☆4",
+    },
+    {
+      rankType: "5",
+      colorClass: "text-rarity-5",
+      text: "☆5",
+    },
+  ],
+  rareRankTypes: ["4", "5"],
+  lowerRankType: "4",
+  upperRankType: "5",
+}
+export const rarityMetaRecord: Record<GameType, RarityMeta> = {
+  genshin: genshinAndHsr,
+  hsr: genshinAndHsr,
+  zzz: {
+    rankTypes: [
+      {
+        rankType: "2",
+        colorClass: "text-rarity-3",
+        text: "B",
+      },
+      {
+        rankType: "3",
+        colorClass: "text-rarity-4",
+        text: "A",
+      },
+      {
+        rankType: "4",
+        colorClass: "text-rarity-5",
+        text: "S",
+      },
+    ],
+    rareRankTypes: ["3", "4"],
+    lowerRankType: "3",
+    upperRankType: "4",
+  },
+}
+
+export const rankTypeToText = (meta: RarityMeta, rankType: string) => {
+  return meta.rankTypes.find(e => e.rankType === rankType)?.text ?? ""
+}
+
+export const rankTypeToColorClass = (meta: RarityMeta, rankType: string) => {
+  return meta.rankTypes.find(e => e.rankType === rankType)?.colorClass ?? ""
 }

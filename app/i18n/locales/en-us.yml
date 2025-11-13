@@ -12,6 +12,7 @@ ui:
 games:
   genshin: Genshin Impact
   hsr: "Honkai: Star Rail"
+  zzz: Zenless Zone Zero
 
 placeholders:
   genshin:
@@ -22,6 +23,10 @@ placeholders:
     game: "Honkai: Star Rail"
     gacha: Warp
     historyOperation: "**Warp** → **Check Details** → **Warp History**"
+  zzz:
+    game: Zenless Zone Zero
+    gacha: Signal Search
+    historyOperation: "**Signal Search** → **Search History**"
 
 gacha:
   genshin:
@@ -35,6 +40,11 @@ gacha:
     collabCharacter: Character Collaboration Warp
     collabLightCone: Light Cone Collaboration Warp
     standard: Standard Warp
+  zzz:
+    exclusiveChannel: Exclusive Channel
+    wEngineChannel: W-Engine Channel
+    stableChannel: Stable Channel
+    bangbooChannel: Bangboo Channel
 
 about:
   title: About This App
@@ -119,6 +129,7 @@ howToGetUrl:
 fetchAllHistory: Show pity count history
 fetchAllHistoryDesc_genshin: When enabled, fetches all history from the past year so you can view pity count history. The first fetch takes time. To change this setting you must clear the history.
 fetchAllHistoryDesc_hsr: When enabled, fetches all history from the past 6 months (24 months for collaboration warps) so you can view pity count history. The first fetch takes time. To change this setting you must clear the history.
+fetchAllHistoryDesc_zzz: When enabled, fetches all history from the past 6 months so you can view pity count history. The first fetch takes time. To change this setting you must clear the history.
 urlInput: Enter URL
 getHistory: Fetch History
 clearHistory: Clear History
@@ -135,10 +146,10 @@ pityCount: Pity Count
 dateTime: Date/Time
 noData: No data
 pityHistory: Pity Count History
-lastPulled: Last pulled ☆{star}
-pityCountWithStar: "☆{star} pity count"
-prob: Chance to get a ☆5 in the next 10-pull
-offBannerRate: ☆5 Off-banner Rate
+lastPulled: Last pulled {rank}
+pityCountWithRank: "{rank} pity count"
+prob: Chance to get a {rank} in the next 10-pull
+offBannerRate: "{rank} Off-banner Rate"
 notEnoughData: Not enough data
 
 errors:
@@ -149,6 +160,7 @@ errors:
   invalidAuthKey: Invalid URL. Please obtain a new one.
   tooManyRequests: Too many requests to the server. Please try again later.
   uidMismatch: The UID associated with the URL does not match the game account. Please check your game account or clear the history.
+  badRequest: Please reload the page. If the issue persists, please wait a while and try again.
   unknown: An unknown error occurred. Please try again later.
 
 unknown: Unknown

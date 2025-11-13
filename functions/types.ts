@@ -6,14 +6,22 @@ export interface GachaTypeMeta {
   apiEndpoint: string
 }
 
+export interface GameMeta {
+  queryKey: string
+  respectLang: boolean
+  lowerRankType: string
+  upperRankType: string
+}
+
 export const GachaLogResponseItem = z.object({
   id: z.string(),
   name: z.string(),
   rank_type: z.string(),
-  item_type: z.enum(["Character", "Light Cone", "Weapon"] as const),
+  item_type: z.string(),
   gacha_type: z.string(),
   queryGachaType: z.string(),
   uid: z.string(),
+  lang: z.string(),
   time: z.string(),
 })
 
@@ -33,6 +41,7 @@ export const FetchGachaLogRequest = z.object({
   authkey: z.string().min(1),
   region: z.string().min(1),
   gameBiz: z.string().min(1),
+  lang: z.string().min(1),
   latestIds: z.record(z.string(), z.string()),
   uid: z.string().nullable(),
   untilLatestRare: z.boolean().optional().default(false),

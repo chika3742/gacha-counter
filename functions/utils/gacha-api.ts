@@ -14,7 +14,6 @@ export class GachaApi {
       authkey_ver: "1",
       sign_type: "2",
       auth_appid: "webview_gacha",
-      lang: "en",
       game_biz: this.gameBiz,
       size: GachaApi.itemsPerPage.toString(),
       authkey: this.authKey,
@@ -22,15 +21,24 @@ export class GachaApi {
     }
   }
 
-  async getGachaLog(type: GachaTypeMeta, endId?: string): Promise<GachaLogResponse> {
+  static readonly headers = {
+    "user-agent": "Mozilla/5.0 (iPad; CPU OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+    "origin": "https://gs.hoyoverse.com",
+    "referer": "https://gs.hoyoverse.com/",
+  }
+
+  async getGachaLog(type: GachaTypeMeta, endId: string | undefined, lang: string, queryKey: string): Promise<GachaLogResponse> {
     const params = {
       ...this.commonParams,
-      gacha_type: type.id,
+      [queryKey]: type.id,
+      lang,
       end_id: endId ?? "0",
     }
     const url = new URL(`${type.apiEndpoint}?${new URLSearchParams(params).toString()}`)
 
-    const result = await fetch(url)
+    const result = await fetch(url, {
+      headers: GachaApi.headers,
+    })
     if (!result.ok) {
       throw new Error(`Request failed with status ${result.status} ${result.statusText}`)
     }
