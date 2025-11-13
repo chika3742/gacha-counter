@@ -2,9 +2,7 @@ import * as path from "node:path"
 import * as fs from "node:fs/promises"
 
 const run = async () => {
-  // @ts-ignore
   const tempDir = path.resolve(import.meta.dirname, "../remote-assets")
-  // @ts-ignore
   const assetsDir = path.resolve(import.meta.dirname, "../app/assets/remote")
   // clean up
   try {
