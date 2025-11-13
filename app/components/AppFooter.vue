@@ -39,6 +39,13 @@ const repositoryUrl = "https://github.com/chika3742/gacha-counter"
         </v-btn>
       </div>
 
+      <div
+        class="mx-4"
+        style="font-size: 0.6rem"
+      >
+        {{ $t("trademarks") }}
+      </div>
+
       <div class="d-flex align-center justify-end">
         <span
           class="ml-4"

@@ -1,4 +1,5 @@
 appName: Pity Counter
+trademarks: 'This website is not affiliated with miHoYo or COGNOSPHERE. "Genshin Impact", "Honkai: Star Rail" and "Zenless Zone Zero" are trademarks of miHoYo Co., Ltd. or COGNOSPHERE PTE LTD.'
 
 seo:
   description: "An app that automatically fetches gacha history for Genshin Impact / Honkai: Star Rail and displays pity counts and their history."
