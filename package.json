@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
+    "lint": "eslint",
+    "typecheck": "nuxt typecheck",
     "dev": "nuxt dev",
     "dev:cf": "wrangler pages dev --port 3000 -- bun run dev --port 3001",
     "generate": "nuxt generate",
