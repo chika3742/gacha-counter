@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import iconGenshin from "~/assets/img/icon_genshin.png"
 import iconHsr from "~/assets/img/icon_hsr.png"
+import iconZzz from "~/assets/img/icon_zzz.png"
 import { GachaFetchApiError, GachaFetchClientError } from "~/types/errors.js"
 import { type GameType, requestSchemaVersion } from "~~/functions/constants.js"
-import { clearByGameFromDb, db, getLatestIdsFromDb, getUidFromDb } from "~/dexie/db.js"
+import { clearByGameFromDb, db, getLastLog, getLatestIdsFromDb } from "~/dexie/db.js"
 import { useObservable } from "@vueuse/rxjs"
 import { liveQuery } from "dexie"
 import type { GachaLogEntry } from "~/types/db.js"
@@ -32,6 +33,13 @@ const games = [
     id: "hsr",
     img: iconHsr,
     color: "#85f38c",
+  },
+  {
+    name: i18n.t("games.zzz"),
+    id: "zzz",
+    img: iconZzz,
+    color: "#85c5f3",
+    requireLocaleText: true,
   },
 ]
 
@@ -79,27 +87,29 @@ const history = computed(() => {
 })
 
 const getHistory = async () => {
-  let authkey: string, region: string, gameBiz: string
+  let authkey: string, region: string, gameBiz: string, lang: string
   try {
-    ({ authkey, region, gameBiz } = parseKeyUrl(url.value, config.game))
+    ({ authkey, region, gameBiz, lang } = parseKeyUrl(url.value, config.game))
   } catch (e) {
     console.warn(e)
     urlError.value = i18n.t("errors.invalidUrl")
     return
   }
-
   urlError.value = ""
 
   try {
+    const lastLog = await getLastLog(config.game)
+
     await progress.fetch({
       requestSchemaVersion,
       authkey,
       region,
       gameBiz,
+      lang: lastLog?.lang ?? lang,
       game: config.game,
       latestIds: await getLatestIdsFromDb(config.game),
       untilLatestRare: !fetchAllHistory.value,
-      uid: await getUidFromDb(config.game),
+      uid: lastLog?.uid ?? null,
     })
 
     config.urlRecord = {

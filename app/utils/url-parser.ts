@@ -3,6 +3,7 @@ import type { GameType } from "~~/functions/constants.js"
 const urlOrigins: Record<GameType, string[]> = {
   genshin: ["https://public-operation-hk4e-sg.hoyoverse.com"],
   hsr: ["https://public-operation-hkrpg-sg.hoyoverse.com"],
+  zzz: ["https://public-operation-nap-sg.hoyoverse.com"],
 }
 
 export const parseKeyUrl = (url: string, game: GameType) => {
@@ -16,7 +17,8 @@ export const parseKeyUrl = (url: string, game: GameType) => {
   const authkey = params.get("authkey")
   const region = params.get("region")
   const gameBiz = params.get("game_biz")
-  if (!authkey || !region || !gameBiz) {
+  const lang = params.get("lang")
+  if (!authkey || !region || !gameBiz || !lang) {
     throw new Error("Invalid URL: missing authkey or region")
   }
 
@@ -24,5 +26,6 @@ export const parseKeyUrl = (url: string, game: GameType) => {
     authkey,
     region,
     gameBiz,
+    lang,
   }
 }

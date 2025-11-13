@@ -17,12 +17,8 @@ export const getLatestIdsFromDb = async (game: GameType) => {
   return Object.fromEntries(results.filter(e => e).map(e => [e!.queryGachaType, e!.remoteId]))
 }
 
-export const getUidFromDb = async (game: GameType) => {
-  const first = await db.gachaLogs.where({ game }).first()
-  if (!first) {
-    return null
-  }
-  return first.uid ?? null
+export const getLastLog = (game: GameType) => {
+  return db.gachaLogs.where({ game }).last()
 }
 
 export const clearByGameFromDb = async (game: GameType) => {

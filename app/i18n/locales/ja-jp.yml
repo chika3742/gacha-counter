@@ -12,6 +12,7 @@ ui:
 games:
   genshin: 原神
   hsr: 崩壊：スターレイル
+  zzz: ゼンレスゾーンゼロ
 
 placeholders:
   genshin:
@@ -22,6 +23,10 @@ placeholders:
     game: 崩壊：スターレイル
     gacha: 跳躍
     historyOperation: 「跳躍」→「詳細を確認」→「跳躍履歴」
+  zzz:
+    game: ゼンレスゾーンゼロ
+    gacha: 変調
+    historyOperation: 「変調」→「詳細」→「変調履歴」
 
 gacha:
   genshin:
@@ -35,6 +40,11 @@ gacha:
     collabCharacter: コラボ跳躍・キャラクター
     collabLightCone: コラボ跳躍・光円錐
     standard: 通常跳躍
+  zzz:
+    exclusiveChannel: 独占チャンネル
+    wEngineChannel: 音動機チャンネル
+    stableChannel: 常設チャンネル
+    bangbooChannel: ボンプチャンネル
 
 about:
   title: このアプリについて
@@ -121,6 +131,7 @@ howToGetUrl:
 fetchAllHistory: 天井カウントの履歴を表示
 fetchAllHistoryDesc_genshin: オンにすると過去1年の全ての履歴を取得し、天井カウントの履歴を確認できますが、初回の取得に時間がかかります。変更するには、履歴をクリアする必要があります。
 fetchAllHistoryDesc_hsr: オンにすると過去6ヶ月（コラボ跳躍は24ヶ月）の全ての履歴を取得し、天井カウントの履歴を確認できますが、初回の取得に時間がかかります。変更するには、履歴をクリアする必要があります。
+fetchAllHistoryDesc_zzz: オンにすると過去6ヶ月の全ての履歴を取得し、天井カウントの履歴を確認できますが、初回の取得に時間がかかります。変更するには、履歴をクリアする必要があります。
 urlInput: URL入力
 getHistory: 履歴を取得
 clearHistory: 履歴をクリア
@@ -137,10 +148,10 @@ pityCount: 天井カウント
 dateTime: 日時
 noData: データがありません
 pityHistory: 天井カウントの履歴
-lastPulled: 最後に引いた☆{star}
-pityCountWithStar: "☆{star} 天井カウント"
-prob: ☆5 次の10連で引ける確率
-offBannerRate: ☆5 すり抜け率
+lastPulled: 最後に引いた {rank}
+pityCountWithRank: "{rank} 天井カウント"
+prob: "{rank} 次の10連で引ける確率"
+offBannerRate: "{rank} すり抜け率"
 notEnoughData: データ不足
 
 errors:
@@ -151,6 +162,7 @@ errors:
   invalidAuthKey: 無効なURLです。再度取得してください。
   tooManyRequests: サーバーへのリクエストが多すぎます。しばらくしてから再度お試しください。
   uidMismatch: URLに紐づくゲームアカウントのUIDが一致しません。ゲームアカウントを確認するか、履歴をクリアしてください。
+  badRequest: ページを再読み込みしてください。それでも改善しない場合は、しばらく待ってから再度お試しください。
   unknown: 不明なエラーが発生しました。しばらくしてから再度お試しください。
 
 unknown: 不明

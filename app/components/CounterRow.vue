@@ -9,13 +9,15 @@
     >
       <v-card>
         <div class="card">
-          <h4>{{ i18n.t("pityCountWithStar", { star: "5" }) }}</h4>
+          <h4>
+            {{ i18n.t("pityCountWithRank", { rank: rankTypeToText(rarityMeta, rarityMeta.upperRankType) }) }}
+          </h4>
           <div class="card__content">
             <span
-              :class="pityInfo[5].count > gachaType.star5PseudoPityBorder
-                ? 'text-red' : pityInfo[5].count > gachaType.star5PseudoPityBorder - 10
+              :class="pityInfo.upper.count > gachaType.star5PseudoPityBorder
+                ? 'text-red' : pityInfo.upper.count > gachaType.star5PseudoPityBorder - 10
                   ? 'text-orange-darken-2' : ''"
-            >{{ pityInfo[5].count }}</span> / {{ gachaType.star5Pity }}
+            >{{ pityInfo.upper.count }}</span> / {{ gachaType.star5Pity }}
           </div>
         </div>
         <div class="card__bar card__bar--rank5" />
@@ -23,9 +25,9 @@
 
       <v-card>
         <div class="card">
-          <h4>{{ i18n.t("lastPulled", { star: "5" }) }}</h4>
+          <h4>{{ i18n.t("lastPulled", { rank: rankTypeToText(rarityMeta, rarityMeta.upperRankType) }) }}</h4>
           <div class="card__content">
-            {{ pityInfo[5].lastPulled }}
+            {{ pityInfo.upper.lastPulled }}
           </div>
         </div>
         <div class="card__bar card__bar--rank5" />
@@ -33,9 +35,9 @@
 
       <v-card>
         <div class="card">
-          <h4>{{ i18n.t("pityCountWithStar", { star: "4" }) }}</h4>
+          <h4>{{ i18n.t("pityCountWithRank", { rank: rankTypeToText(rarityMeta, rarityMeta.lowerRankType) }) }}</h4>
           <div class="card__content">
-            <span>{{ pityInfo[4].count }}</span> / {{ star4Pity }}
+            <span>{{ pityInfo.lower.count }}</span> / {{ star4Pity }}
           </div>
         </div>
         <div class="card__bar card__bar--rank4" />
@@ -43,9 +45,9 @@
 
       <v-card>
         <div class="card">
-          <h4>{{ i18n.t("lastPulled", { star: "4" }) }}</h4>
+          <h4>{{ i18n.t("lastPulled", { rank: rankTypeToText(rarityMeta, rarityMeta.lowerRankType) }) }}</h4>
           <div class="card__content">
-            {{ pityInfo[4].lastPulled }}
+            {{ pityInfo.lower.lastPulled }}
           </div>
         </div>
         <div class="card__bar card__bar--rank4" />
@@ -53,7 +55,7 @@
 
       <v-card>
         <div class="card">
-          <h4>{{ i18n.t("prob") }}</h4>
+          <h4>{{ i18n.t("prob", { rank: rankTypeToText(rarityMeta, rarityMeta.upperRankType) }) }}</h4>
           <div class="card__content">
             <span>{{ (rank5Prob * 100).toFixed(2) }}</span>%
           </div>
@@ -63,7 +65,7 @@
 
       <v-card v-if="showPityHistory && gachaType.offBannerItems.length > 0">
         <div class="card">
-          <h4>{{ i18n.t("offBannerRate") }}</h4>
+          <h4>{{ i18n.t("offBannerRate", { rank: rankTypeToText(rarityMeta, rarityMeta.upperRankType) }) }}</h4>
           <div
             v-if="rank5OffBannerRate !== null"
             class="card__content"
@@ -99,16 +101,10 @@
             color="primary"
           >
             <v-chip
-              text="☆3"
-              value="3"
-            />
-            <v-chip
-              text="☆4"
-              value="4"
-            />
-            <v-chip
-              text="☆5"
-              value="5"
+              v-for="rank in rarityMeta.rankTypes"
+              :key="rank.rankType"
+              :text="rank.text"
+              :value="rank.rankType"
             />
           </v-chip-group>
           <p class="my-0 opacity-70 text-caption text-center d-md-none">
@@ -130,19 +126,17 @@
             </template>
             <template #item.rank="{ value }">
               <div
-                :class="`text-rarity-${value}`"
+                :class="rankTypeToColorClass(rarityMeta, value)"
                 class="d-flex align-center"
               >
-                <v-icon size="18">
-                  mdi-star
-                </v-icon>
-                <span style="font-size: 1.3em">{{ value }}</span>
+                <span style="font-size: 1.3em">{{ rankTypeToText(rarityMeta, value) }}</span>
               </div>
             </template>
 
             <template #item.name="{ item, value }">
               <div class="d-flex align-center ga-2">
                 <AsyncImg
+                  v-if="item.importImageUrl"
                   :key="item.importImageUrl"
                   :src="item.importImageUrl"
                   size="35px"
@@ -183,10 +177,12 @@ import type { GachaLogEntry } from "~/types/db.js"
 import type { GachaType } from "~/types/gacha-type.js"
 import type { DataTableHeader } from "vuetify/framework"
 import AsyncImg from "~/components/AsyncImg.vue"
+import { rankTypeToColorClass, rankTypeToText, type RarityMeta } from "~/constants.js"
 
 const props = defineProps<{
   entries: GachaLogEntry[]
   gachaType: GachaType
+  rarityMeta: RarityMeta
   showPityHistory: boolean
 }>()
 
@@ -205,7 +201,13 @@ export interface PityCountListItem {
 
 const i18n = useI18n()
 
-const filter = ref<string[]>(["4", "5"])
+const filter = ref<string[]>([])
+const initFilter = () => {
+  filter.value = props.rarityMeta.rareRankTypes
+}
+watch(toRefs(props).rarityMeta, () => {
+  initFilter()
+}, { immediate: true })
 
 const star4Pity = 10
 const tableHeaders = computed<DataTableHeader[]>(() => [
@@ -218,9 +220,9 @@ const tableHeaders = computed<DataTableHeader[]>(() => [
 const pityCounts = computed(() => {
   const result: PityCountListItem[] = []
 
-  const pityCount: Record<string, number> = {
-    4: 0,
-    5: 0,
+  const pityCount: Record<string, number> = {}
+  for (const rankType of props.rarityMeta.rareRankTypes) {
+    pityCount[rankType] = 0
   }
 
   let definitive = false
@@ -229,7 +231,7 @@ const pityCounts = computed(() => {
       pityCount[key]!++
     }
 
-    const name = getItemName(entry)?.[i18n.locale.value] ?? i18n.t("unknown")
+    const name = getItemName(entry)?.[i18n.locale.value] ?? entry.name
     const item: PityCountListItem = {
       entryId: entry.remoteId,
       name,
@@ -237,16 +239,16 @@ const pityCounts = computed(() => {
       count: pityCount[entry.rankType] ?? null,
       countColorClass: getNumberColorClass(pityCount[entry.rankType], entry.rankType, props.gachaType.star5PseudoPityBorder),
       offBanner: props.gachaType.offBannerItems.includes(getItemId(entry) ?? ""),
-      isDefinitive: entry.rankType === "5" ? definitive : null,
+      isDefinitive: entry.rankType === props.rarityMeta.upperRankType ? definitive : null,
       dateTime: DateTime.fromFormat(entry.time, "yyyy-MM-dd HH:mm:ss"),
       rank: entry.rankType,
       importImageUrl: getItemImage(entry),
     }
     result.push(item)
-    if (entry.rankType !== "3") {
+    if (entry.rankType in pityCount) {
       pityCount[entry.rankType] = 0
     }
-    if (entry.rankType === "5") {
+    if (entry.rankType === props.rarityMeta.upperRankType) {
       definitive = item.offBanner
     }
   }
@@ -259,24 +261,24 @@ const filteredPityCountList = computed(() => {
 })
 
 const pityInfo = computed(() => {
-  const r4Item = pityCounts.value.list.find(e => e.rank === "4")
-  const r5Item = pityCounts.value.list.find(e => e.rank === "5")
+  const lowerItem = pityCounts.value.list.find(e => e.rank === props.rarityMeta.lowerRankType)
+  const upperItem = pityCounts.value.list.find(e => e.rank === props.rarityMeta.upperRankType)
   const counts = pityCounts.value.counts
 
   return {
-    4: {
-      count: counts["4"] ?? 0,
-      lastPulled: r4Item?.name ?? "-",
+    lower: {
+      count: counts[props.rarityMeta.lowerRankType] ?? 0,
+      lastPulled: lowerItem?.name ?? "-",
     },
-    5: {
-      count: counts["5"] ?? 0,
-      lastPulled: r5Item?.name ?? "-",
+    upper: {
+      count: counts[props.rarityMeta.upperRankType] ?? 0,
+      lastPulled: upperItem?.name ?? "-",
     },
   }
 })
 
 const rank5Prob = computed(() => {
-  const trial = pityInfo.value[5].count + 10
+  const trial = pityInfo.value.upper.count + 10
 
   const pseudoPityBorder = props.gachaType.star5PseudoPityBorder
   if (trial <= pseudoPityBorder) {
@@ -291,7 +293,7 @@ const rank5Prob = computed(() => {
 })
 
 const rank5OffBannerRate = computed(() => {
-  const consideredRank5 = pityCounts.value.list.filter(e => e.rank === "5" && e.isDefinitive === false)
+  const consideredRank5 = pityCounts.value.list.filter(e => e.rank === props.rarityMeta.upperRankType && e.isDefinitive === false)
   if (consideredRank5.length < 2) {
     return null
   }
@@ -307,13 +309,13 @@ const getNumberColorClass = (count: number | undefined, rank: string, pseudoPity
     return ""
   }
 
-  if (rank === "4") {
+  if (rank === props.rarityMeta.lowerRankType) {
     if (count >= 10) {
       return "text-pity"
     } else {
       return "text-lucky"
     }
-  } else if (rank === "5") {
+  } else if (rank === props.rarityMeta.upperRankType) {
     if (count > pseudoPityBorder) {
       return "text-pity"
     } else {

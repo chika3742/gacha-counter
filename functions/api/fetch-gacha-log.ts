@@ -1,6 +1,6 @@
 import { GachaApi } from "../utils/gacha-api.js"
 import { GachaApiError, GachaLooper, UidMismatchError } from "../utils/gacha-looper.js"
-import { gachaTypeRecord } from "../constants.js"
+import { gachaTypeRecord, gameMetaRecord } from "../constants.js"
 import type { FetchStatus } from "../types.js"
 import { FetchGachaLogRequest } from "../types.js"
 
@@ -26,7 +26,14 @@ export const onRequest: PagesFunction = async (context) => {
   }
 
   const api = new GachaApi(request.authkey, request.region, request.gameBiz)
-  const looper = new GachaLooper(api, gachaTypeRecord[request.game], request.untilLatestRare, request.uid)
+  const looper = new GachaLooper(
+    api,
+    gachaTypeRecord[request.game],
+    gameMetaRecord[request.game],
+    request.untilLatestRare,
+    request.uid,
+    request.lang,
+  )
 
   looper.onProgress = () => {
     sendStatus({
