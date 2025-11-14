@@ -32,9 +32,6 @@ export class GachaLooper {
         this.gameMeta.respectLang ? this.lang : "en",
         this.gameMeta.queryKey,
       )
-      if (response.retcode !== 0) {
-        throw new GachaApiError(response)
-      }
       if (response.data.list.length > 0 && this.uid && response.data.list[0].uid !== this.uid) {
         throw new UidMismatchError()
       }

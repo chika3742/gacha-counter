@@ -57,6 +57,7 @@ export const onRequest: PagesFunction = async (context) => {
     } catch (e) {
       let error: FetchStatus["error"]
       if (e instanceof GachaApiError) {
+        console.log("Remote API returned an error:", e.response)
         error = {
           type: "remote-api-error",
           retcode: e.response.retcode,

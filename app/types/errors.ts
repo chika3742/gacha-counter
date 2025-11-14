@@ -13,6 +13,8 @@ export class GachaFetchApiError extends Error {
             return "errors.authKeyTimeout"
           case -100:
             return "errors.invalidAuthKey"
+          case -1:
+            return "errors.authkeyInvalidOrTimeout"
           case -110:
             return "errors.tooManyRequests"
           default:

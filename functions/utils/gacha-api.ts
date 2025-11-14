@@ -1,4 +1,5 @@
 import type { GachaLogResponse, GachaTypeMeta } from "../types.js"
+import { GachaApiError } from "./gacha-looper.js"
 
 export class GachaApi {
   constructor(
@@ -42,6 +43,10 @@ export class GachaApi {
     if (!result.ok) {
       throw new Error(`Request failed with status ${result.status} ${result.statusText}`)
     }
-    return await result.json<GachaLogResponse>()
+    const parsedResult = await result.json<GachaLogResponse>()
+    if (parsedResult.retcode !== 0) {
+      throw new GachaApiError(parsedResult)
+    }
+    return parsedResult
   }
 }

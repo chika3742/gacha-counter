@@ -160,6 +160,7 @@ errors:
   network: ネットワークエラーが発生しました。しばらくしてから再度お試しください。
   authKeyTimeout: URLの有効期限が切れています。再度取得してください。
   invalidAuthKey: 無効なURLです。再度取得してください。
+  authkeyInvalidOrTimeout: URLが無効であるか、有効期限が切れています。再度取得してください。
   tooManyRequests: サーバーへのリクエストが多すぎます。しばらくしてから再度お試しください。
   uidMismatch: URLに紐づくゲームアカウントのUIDが一致しません。ゲームアカウントを確認するか、履歴をクリアしてください。
   badRequest: ページを再読み込みしてください。それでも改善しない場合は、しばらく待ってから再度お試しください。
