@@ -17,9 +17,11 @@ const offBannerHsrLC = [
 ]
 const offBannerZzzAgents = [
   "Nekomata", "Soldier 11", "Koleda", "Lycaon", "Grace", "Rina",
+  "猫又", "「11号」", "クレタ", "ライカン", "グレース", "リナ",
 ]
 const offBannerZzzWEngines = [
   "Steel Cushion", "The Brimstone", "Hellfire Gears", "The Restrained", "Fusion Compiler", "Weeping Cradle",
+  "鋼の肉球", "ブリムストーン", "燃獄ギア", "拘縛されし者", "複合コンパイラ", "啜り泣くゆりかご",
 ]
 
 export const gachaTypes: Record<GameType, GachaType[]> = {
