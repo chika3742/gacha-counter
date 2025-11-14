@@ -238,7 +238,7 @@ const pityCounts = computed(() => {
       type: entry.itemType,
       count: pityCount[entry.rankType] ?? null,
       countColorClass: getNumberColorClass(pityCount[entry.rankType], entry.rankType, props.gachaType.star5PseudoPityBorder),
-      offBanner: props.gachaType.offBannerItems.includes(getItemId(entry) ?? ""),
+      offBanner: props.gachaType.offBannerItems.includes(getItemId(entry) ?? name),
       isDefinitive: entry.rankType === props.rarityMeta.upperRankType ? definitive : null,
       dateTime: DateTime.fromFormat(entry.time, "yyyy-MM-dd HH:mm:ss"),
       rank: entry.rankType,
