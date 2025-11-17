@@ -151,7 +151,7 @@ const clearHistory = () => {
   <div class="doc-container d-flex flex-column ga-4">
     <v-btn-toggle
       v-model="config.game"
-      style="height: 70px"
+      style="height: 55px"
       :disabled="processing"
       mandatory
     >
@@ -165,7 +165,7 @@ const clearHistory = () => {
         <template #prepend>
           <v-img
             :src="entry.img"
-            width="50px"
+            width="35px"
           />
         </template>
       </v-btn>
