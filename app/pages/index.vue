@@ -193,7 +193,7 @@ const clearHistory = () => {
           hide-details
         />
         <div style="font-size: 0.9em">
-          {{ $t(`fetchAllHistoryDesc_${config.game}`) }}
+          {{ $t("fetchAllHistoryDesc", { duration: $t(`fetchAllHistoryDescDuration.${config.game}`) }) }}
         </div>
       </div>
       <v-row

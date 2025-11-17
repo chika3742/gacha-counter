@@ -127,9 +127,11 @@ howToGetUrl:
       1. The URL will be copied automatically and the script will exit.
 
 fetchAllHistory: Show pity count history
-fetchAllHistoryDesc_genshin: When enabled, fetches all history from the past year so you can view pity count history. The first fetch takes time. To change this setting you must clear the history.
-fetchAllHistoryDesc_hsr: When enabled, fetches all history from the past 6 months (24 months for collaboration warps) so you can view pity count history. The first fetch takes time. To change this setting you must clear the history.
-fetchAllHistoryDesc_zzz: When enabled, fetches all history from the past 6 months so you can view pity count history. The first fetch takes time. To change this setting you must clear the history.
+fetchAllHistoryDesc: When enabled, fetches all history from {duration} so you can view pity count history. The first fetch takes time. To change this setting you must clear the history.
+fetchAllHistoryDescDuration:
+  genshin: the past year
+  hsr: the past 6 months (24 months for collaboration warps)
+  zzz: the past 6 months
 urlInput: Enter URL
 getHistory: Fetch History
 clearHistory: Clear History

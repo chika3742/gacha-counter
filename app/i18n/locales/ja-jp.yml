@@ -129,9 +129,11 @@ howToGetUrl:
       1. 自動的にURLがコピーされ、スクリプトが終了します。
 
 fetchAllHistory: 天井カウントの履歴を表示
-fetchAllHistoryDesc_genshin: オンにすると過去1年の全ての履歴を取得し、天井カウントの履歴を確認できますが、初回の取得に時間がかかります。変更するには、履歴をクリアする必要があります。
-fetchAllHistoryDesc_hsr: オンにすると過去6ヶ月（コラボ跳躍は24ヶ月）の全ての履歴を取得し、天井カウントの履歴を確認できますが、初回の取得に時間がかかります。変更するには、履歴をクリアする必要があります。
-fetchAllHistoryDesc_zzz: オンにすると過去6ヶ月の全ての履歴を取得し、天井カウントの履歴を確認できますが、初回の取得に時間がかかります。変更するには、履歴をクリアする必要があります。
+fetchAllHistoryDesc: オンにすると過去{duration}の全ての履歴を取得し、天井カウントの履歴を確認できますが、初回の取得に時間がかかります。変更するには、履歴をクリアする必要があります。
+fetchAllHistoryDescDuration:
+  genshin: 1年
+  hsr: 6ヶ月（コラボ跳躍は24ヶ月）
+  zzz: 6ヶ月
 urlInput: URL入力
 getHistory: 履歴を取得
 clearHistory: 履歴をクリア
