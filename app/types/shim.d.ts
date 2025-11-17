@@ -24,17 +24,17 @@ declare module "~/assets/remote/genshin/data/weapons.json" {
 }
 
 declare module "~/assets/remote/hsr/data/characters.json" {
-  const hCharacters: {
+  const hCharacters: Record<string, {
     id: string
     name: LocalizedText
-  }[]
+  }>
   export default hCharacters
 }
 
 declare module "~/assets/remote/hsr/data/light-cones.json" {
-  const hLightCones: {
+  const hLightCones: Record<string, {
     id: string
     name: LocalizedText
-  }[]
+  }>
   export default hLightCones
 }

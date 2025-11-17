@@ -24,19 +24,32 @@ const run = async () => {
 
   await fs.cp(`${tempDir}/gm-assets/img/characters`, `${assetsDir}/genshin/img/characters`, { recursive: true })
   await fs.cp(`${tempDir}/gm-assets/img/weapons`, `${assetsDir}/genshin/img/weapons`, { recursive: true })
-  await fs.cp(`${tempDir}/gm-assets/data/characters.json`, `${assetsDir}/genshin/data/characters.json`)
-  await fs.cp(`${tempDir}/gm-assets/data/weapons.json`, `${assetsDir}/genshin/data/weapons.json`)
+  await convertJsonAndWrite(`${tempDir}/gm-assets/data/characters.json`, `${assetsDir}/genshin/data/characters.json`)
+  await convertJsonAndWrite(`${tempDir}/gm-assets/data/weapons.json`, `${assetsDir}/genshin/data/weapons.json`)
 
   await fs.cp(`${tempDir}/hsr-material/packages/nuxt/assets/img/characters`, `${assetsDir}/hsr/img/characters`, { recursive: true })
   await fs.cp(`${tempDir}/hsr-material/packages/nuxt/assets/img/light-cones`, `${assetsDir}/hsr/img/light-cones`, { recursive: true })
   await fs.mkdir(`${assetsDir}/hsr/data`, { recursive: true })
-  await fileToJson(`${tempDir}/hsr-material/packages/nuxt/assets/data/characters.yaml`, `${assetsDir}/hsr/data/characters.json`)
-  await fileToJson(`${tempDir}/hsr-material/packages/nuxt/assets/data/light-cones.yaml`, `${assetsDir}/hsr/data/light-cones.json`)
+  await yamlFileToJsonAndWrite(`${tempDir}/hsr-material/packages/nuxt/assets/data/characters.yaml`, `${assetsDir}/hsr/data/characters.json`)
+  await yamlFileToJsonAndWrite(`${tempDir}/hsr-material/packages/nuxt/assets/data/light-cones.yaml`, `${assetsDir}/hsr/data/light-cones.json`)
 }
 
-const fileToJson = async (input: string, output: string) => {
-  const parsed = Bun.YAML.parse(await Bun.file(input).text())
-  return await Bun.write(output, JSON.stringify(parsed))
+const convertJsonAndWrite = async (input: string, output: string) => {
+  const parsed = await Bun.file(input).json() as any
+  return await Bun.write(output, JSON.stringify(toEnNameMap(Object.values(parsed))))
+}
+
+const yamlFileToJsonAndWrite = async (input: string, output: string) => {
+  const parsed = Bun.YAML.parse(await Bun.file(input).text()) as any
+  return await Bun.write(output, JSON.stringify(toEnNameMap(parsed)))
+}
+
+const toEnNameMap = (items: any[]) => {
+  const map: Record<string, any> = {}
+  for (const item of items) {
+    map[item.name.locales.en] = item
+  }
+  return map
 }
 
 void run()

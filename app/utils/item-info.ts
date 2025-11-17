@@ -4,26 +4,22 @@ import gWeapons from "~/assets/remote/genshin/data/weapons.json"
 import hCharacters from "~/assets/remote/hsr/data/characters.json"
 import hLightCones from "~/assets/remote/hsr/data/light-cones.json"
 
-const findByEnName = <T>(list: ({ name: { locales: { en: string } } } & T)[], name: string) => {
-  return list.find(e => e.name.locales.en === name)
-}
-
 const findItem = (entry: GachaLogEntry) => {
   switch (entry.game) {
     case "genshin":
       switch (entry.itemType) {
         case "Character":
-          return findByEnName(Object.values(gCharacters), entry.name)
+          return gCharacters[entry.name]
         case "Weapon":
-          return findByEnName(Object.values(gWeapons), entry.name)
+          return gWeapons[entry.name]
       }
       break
     case "hsr":
       switch (entry.itemType) {
         case "Character":
-          return findByEnName(hCharacters, entry.name)
+          return hCharacters[entry.name]
         case "Light Cone":
-          return findByEnName(hLightCones, entry.name)
+          return hLightCones[entry.name]
       }
       break
   }
@@ -47,17 +43,17 @@ export const getItemImage = (entry: GachaLogEntry) => {
     case "genshin":
       switch (entry.itemType) {
         case "Character":
-          return createUrl(findByEnName(Object.values(gCharacters), entry.name)?.smallImageUrl)
+          return createUrl(gCharacters[entry.name]?.smallImageUrl)
         case "Weapon":
-          return createUrl(findByEnName(Object.values(gWeapons), entry.name)?.imageUrl)
+          return createUrl(gWeapons[entry.name]?.imageUrl)
       }
       break
     case "hsr":
       switch (entry.itemType) {
         case "Character":
-          return createUrl("img/characters/" + findByEnName(hCharacters, entry.name)?.id + "_small.webp")
+          return createUrl("img/characters/" + hCharacters[entry.name]?.id + "_small.webp")
         case "Light Cone":
-          return createUrl("img/light-cones/" + findByEnName(hLightCones, entry.name)?.id + ".webp")
+          return createUrl("img/light-cones/" + hLightCones[entry.name]?.id + ".webp")
       }
       break
   }
