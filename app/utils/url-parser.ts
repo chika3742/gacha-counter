@@ -1,9 +1,11 @@
 import type { GameType } from "~~/functions/constants.js"
 
+const sgOrigin = "https://sg.hoyoverse.com"
+
 const urlOrigins: Record<GameType, string[]> = {
-  genshin: ["https://public-operation-hk4e-sg.hoyoverse.com"],
-  hsr: ["https://public-operation-hkrpg-sg.hoyoverse.com"],
-  zzz: ["https://public-operation-nap-sg.hoyoverse.com"],
+  genshin: ["https://public-operation-hk4e-sg.hoyoverse.com", sgOrigin],
+  hsr: ["https://public-operation-hkrpg-sg.hoyoverse.com", sgOrigin],
+  zzz: ["https://public-operation-nap-sg.hoyoverse.com", sgOrigin],
 }
 
 export const parseKeyUrl = (url: string, game: GameType) => {
@@ -19,7 +21,7 @@ export const parseKeyUrl = (url: string, game: GameType) => {
   const gameBiz = params.get("game_biz")
   const lang = params.get("lang")
   if (!authkey || !region || !gameBiz || !lang) {
-    throw new Error("Invalid URL: missing authkey or region")
+    throw new Error("Invalid URL: missing required parameters")
   }
 
   return {
