@@ -1,11 +1,11 @@
 import type { GameType } from "~~/functions/constants.js"
 
-const sgOrigin = "https://sg.hoyoverse.com"
+const gsOrigin = "https://gs.hoyoverse.com"
 
 const urlOrigins: Record<GameType, string[]> = {
-  genshin: ["https://public-operation-hk4e-sg.hoyoverse.com", sgOrigin],
-  hsr: ["https://public-operation-hkrpg-sg.hoyoverse.com", sgOrigin],
-  zzz: ["https://public-operation-nap-sg.hoyoverse.com", sgOrigin],
+  genshin: ["https://public-operation-hk4e-sg.hoyoverse.com", gsOrigin],
+  hsr: ["https://public-operation-hkrpg-sg.hoyoverse.com", gsOrigin],
+  zzz: ["https://public-operation-nap-sg.hoyoverse.com", gsOrigin],
 }
 
 export const parseKeyUrl = (url: string, game: GameType) => {
