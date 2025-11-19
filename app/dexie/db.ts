@@ -9,10 +9,16 @@ const db = new Dexie("gacha-counter") as Dexie & {
 db.version(1).stores({
   gachaLogs: "++id, [game+queryGachaType]",
 })
+db.version(2).stores({
+  gachaLogs: "++id, &[game+queryGachaType+remoteId]",
+})
 
 export const getLatestIdsFromDb = async (game: GameType) => {
   const results = await Promise.all(gachaTypeRecord[game].map(async (gachaType) => {
-    return db.gachaLogs.where({ game, queryGachaType: gachaType.id }).last()
+    return db.gachaLogs
+      .where("[game+queryGachaType+remoteId]")
+      .between([game, gachaType.id], [game, gachaType.id, Dexie.maxKey])
+      .last()
   }))
   return Object.fromEntries(results.filter(e => e).map(e => [e!.queryGachaType, e!.remoteId]))
 }

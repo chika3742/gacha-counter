@@ -11,13 +11,13 @@ export const useFetchProgressStore = defineStore("fetch-progress", {
       const updateState = (data: Partial<FetchStatus>) => {
         Object.assign(this, data)
 
-        if (data.status === "done" && data.result) {
+        if (data.result) {
           const list = data.result.map(e => toGachaLogEntry(e, request.game))
-          db.gachaLogs.bulkAdd(list.toReversed())
+          db.gachaLogs.bulkAdd(list)
         }
       }
 
-      updateState({ status: "processing" })
+      updateState({ status: "processing", totalGachaTypes: undefined })
 
       await fetchEventSource("/api/fetch-gacha-log", {
         method: "POST",

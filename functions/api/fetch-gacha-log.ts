@@ -42,17 +42,19 @@ export const onRequest: PagesFunction = async (context) => {
       fetchedCount: looper.fetchedCount,
       gachaTypeProgress: looper.gachaTypeProgress,
       totalGachaTypes: looper.totalGachaTypes,
+      result: looper.consumeResults(),
     })
   }
 
   void (async () => {
     try {
-      const result = await looper.fetchAllGachaTypes(request.latestIds)
+      await looper.fetchAllGachaTypes(request.latestIds)
 
       await sendStatus({
         status: "done",
         game: request.game,
-        result,
+        result: looper.consumeResults(),
+        fetchedCount: looper.fetchedCount,
       })
     } catch (e) {
       let error: FetchStatus["error"]

@@ -6,7 +6,7 @@ import { GachaFetchApiError, GachaFetchClientError } from "~/types/errors.js"
 import { type GameType, requestSchemaVersion } from "~~/functions/constants.js"
 import { clearByGameFromDb, db, getLastLog, getLatestIdsFromDb } from "~/dexie/db.js"
 import { useObservable } from "@vueuse/rxjs"
-import { liveQuery } from "dexie"
+import Dexie, { liveQuery } from "dexie"
 import type { GachaLogEntry } from "~/types/db.js"
 import CounterRows from "~/components/CounterRows.vue"
 import { gachaTypes } from "~/constants.js"
@@ -82,7 +82,10 @@ const processing = computed(() => !!progressText.value)
 const history = computed(() => {
   const game = config.game
   return useObservable<GachaLogEntry[]>(
-    liveQuery(() => db.gachaLogs.where({ game }).toArray()) as any,
+    liveQuery(() => db.gachaLogs
+      .where("[game+queryGachaType+remoteId]")
+      .between([game], [game, Dexie.maxKey, Dexie.maxKey])
+      .toArray()) as any,
   )
 })
 
@@ -117,8 +120,8 @@ const getHistory = async () => {
       [config.game]: url.value,
     }
 
-    if (progress.result && progress.result.length > 0) {
-      snackbar.show(i18n.t("historyFetched", { count: progress.result.length }))
+    if (progress.result && progress.fetchedCount) {
+      snackbar.show(i18n.t("historyFetched", { count: progress.fetchedCount }))
     } else {
       snackbar.show(i18n.t("noNewHistory"))
     }

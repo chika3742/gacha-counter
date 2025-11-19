@@ -20,10 +20,17 @@ export class GachaLooper {
   fetchedCount: number = 0
   gachaTypeProgress: number = 0
   totalGachaTypes: number
+  private newResults: GachaLogResponseItem[] = []
+  consumeResults() {
+    const results = this.newResults
+    this.newResults = []
+    return results
+  }
 
   private async fetchGachaType(type: GachaTypeMeta, latestId: string | undefined) {
-    const result: GachaLogResponseItem[] = []
     let _endId = "0"
+    let fetchedLowerRare = false
+    let fetchedUpperRare = false
 
     while (true) {
       const response = await this.api.getGachaLog(
@@ -40,12 +47,18 @@ export class GachaLooper {
           ...item,
           queryGachaType: type.id,
         }))
-      result.push(...newItems)
+      this.newResults.push(...newItems)
       this.fetchedCount += newItems.length
       this.onProgress?.()
 
-      if (this.untilLatestRare && this.containsRareItems(result)) {
-        break
+      if (this.untilLatestRare) {
+        for (const item of newItems) {
+          if (item.rank_type === this.gameMeta.lowerRankType) fetchedLowerRare = true
+          if (item.rank_type === this.gameMeta.upperRankType) fetchedUpperRare = true
+        }
+        if (fetchedLowerRare && fetchedUpperRare) {
+          break
+        }
       }
       if (newItems.length < GachaApi.itemsPerPage) {
         break
@@ -53,24 +66,15 @@ export class GachaLooper {
       _endId = newItems.slice(-1)[0].id
       await sleep(800)
     }
-
-    return result
   }
 
   async fetchAllGachaTypes(latestIds: FetchGachaLogRequest["latestIds"]) {
-    const result: GachaLogResponseItem[] = []
     for (const gachaType of this.gachaTypes) {
       this.gachaTypeProgress++
       this.onProgress?.()
-      result.push(...await this.fetchGachaType(gachaType, latestIds[gachaType.id]))
+      await this.fetchGachaType(gachaType, latestIds[gachaType.id])
       await sleep(800)
     }
-    return result
-  }
-
-  private containsRareItems(items: GachaLogResponseItem[]) {
-    return items.some(e => e.rank_type === this.gameMeta.lowerRankType)
-      && items.some(e => e.rank_type === this.gameMeta.upperRankType)
   }
 }
 
