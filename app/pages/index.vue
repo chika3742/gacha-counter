@@ -92,7 +92,13 @@ const history = computed(() => {
 const getHistory = async () => {
   let authkey: string, region: string, gameBiz: string, lang: string
   try {
-    ({ authkey, region, gameBiz, lang } = parseKeyUrl(url.value, config.game))
+    const urlRegex = /(https:\/\/\S+)/g
+    const detectedUrl = urlRegex.exec(url.value)?.[1]
+    if (!detectedUrl) {
+      urlError.value = i18n.t("errors.invalidUrl")
+      return
+    }
+    ({ authkey, region, gameBiz, lang } = parseKeyUrl(detectedUrl, config.game))
   } catch (e) {
     console.warn(e)
     urlError.value = i18n.t("errors.invalidUrl")
