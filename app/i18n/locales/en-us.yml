@@ -142,6 +142,19 @@ progress: "Fetched {count} {gacha} item(s) ({current}/{total})"
 historyFetched: "Fetched {count} history item(s)"
 noNewHistory: No new history. If you just pulled, try again in up to 1 hour.
 
+io:
+  import: Import
+  export: Export
+  exportTitle: Select games to export
+  importTitle: Select games to import
+  exported: "Exported {count} history item(s)."
+  nothingToExport: There is no history to export.
+  imported: "Imported {imported} item(s) ({skipped} duplicate(s) skipped)."
+  importEmpty: The file contained no history items.
+  importInvalid: Could not import. The file is not a valid history file.
+  unsupportedVersion: This file's format version is not supported. Please update the app.
+  fileTooLarge: The file is too large to import.
+
 rarity: Rarity
 itemName: Item Name
 pityCount: Pity Count

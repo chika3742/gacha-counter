@@ -4,7 +4,7 @@ import iconHsr from "~/assets/img/icon_hsr.png"
 import iconZzz from "~/assets/img/icon_zzz.png"
 import { GachaFetchApiError, GachaFetchClientError } from "~/types/errors.js"
 import { type GameType, requestSchemaVersion } from "~~/functions/constants.js"
-import { clearByGameFromDb, db, getLastLog, getLatestIdsFromDb } from "~/dexie/db.js"
+import { clearByGameFromDb, countByGameFromDb, db, getLastLog, getLatestIdsFromDb } from "~/dexie/db.js"
 import { useObservable } from "@vueuse/rxjs"
 import Dexie, { liveQuery } from "dexie"
 import type { GachaLogEntry } from "~/types/db.js"
@@ -114,11 +114,13 @@ const getHistory = async () => {
       authkey,
       region,
       gameBiz,
-      lang: lastLog?.lang ?? lang,
+      // `|| ` (not `?? `) so imported entries with an empty uid/lang fall back
+      // to the URL-derived values instead of poisoning the fetch.
+      lang: lastLog?.lang || lang,
       game: config.game,
       latestIds: await getLatestIdsFromDb(config.game),
       untilLatestRare: !fetchAllHistory.value,
-      uid: lastLog?.uid ?? null,
+      uid: lastLog?.uid || null,
     })
 
     config.urlRecord = {
@@ -153,6 +155,60 @@ const clearHistory = () => {
       snackbar.show(i18n.t("historyCleared"))
     },
   )
+}
+
+const { exportHistory, parseImportFile, importEntries } = useHistoryIo()
+const fileInput = ref<HTMLInputElement | null>(null)
+
+// Export dialog
+const exportDialog = ref(false)
+const exportGames = ref<GameType[]>([])
+const gameCounts = ref<Record<GameType, number>>({} as Record<GameType, number>)
+
+const openExportDialog = async () => {
+  gameCounts.value = await countByGameFromDb()
+  exportGames.value = (gameCounts.value[config.game] ?? 0) > 0 ? [config.game] : []
+  exportDialog.value = true
+}
+
+const doExport = async () => {
+  exportDialog.value = false
+  await exportHistory(exportGames.value)
+}
+
+// Import dialog
+const importDialog = ref(false)
+const importGames = ref<GameType[]>([])
+const importCounts = ref<Partial<Record<GameType, number>>>({})
+const parsedEntries = ref<Omit<GachaLogEntry, "id">[]>([])
+
+const importAvailableGames = computed(() =>
+  games.filter(g => (importCounts.value[g.id as GameType] ?? 0) > 0))
+
+const triggerImport = () => fileInput.value?.click()
+
+const onFileSelected = async (e: Event) => {
+  const input = e.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = "" // reset so re-selecting the same file fires change again
+  if (!file) return
+
+  const entries = await parseImportFile(file)
+  if (!entries) return
+
+  const counts: Partial<Record<GameType, number>> = {}
+  for (const entry of entries) {
+    counts[entry.game] = (counts[entry.game] ?? 0) + 1
+  }
+  parsedEntries.value = entries
+  importCounts.value = counts
+  importGames.value = Object.keys(counts) as GameType[]
+  importDialog.value = true
+}
+
+const doImport = async () => {
+  importDialog.value = false
+  await importEntries(parsedEntries.value, importGames.value)
 }
 </script>
 
@@ -205,11 +261,30 @@ const clearHistory = () => {
           {{ $t("fetchAllHistoryDesc", { duration: $t(`fetchAllHistoryDescDuration.${config.game}`) }) }}
         </div>
       </div>
+      <input
+        ref="fileInput"
+        type="file"
+        accept="application/json,.json"
+        style="display: none"
+        @change="onFileSelected"
+      >
       <v-row
         no-gutters
         style="gap: 16px"
       >
         <v-spacer />
+        <v-btn
+          :disabled="processing"
+          @click="triggerImport"
+        >
+          {{ $t("io.import") }}
+        </v-btn>
+        <v-btn
+          :disabled="processing"
+          @click="openExportDialog"
+        >
+          {{ $t("io.export") }}
+        </v-btn>
         <v-btn
           :disabled="processing"
           @click="clearHistory"
@@ -241,6 +316,73 @@ const clearHistory = () => {
         :show-pity-history="fetchAllHistory"
       />
     </article>
+
+    <v-dialog
+      v-model="exportDialog"
+      max-width="400px"
+    >
+      <v-card :title="$t('io.exportTitle')">
+        <template #text>
+          <v-checkbox
+            v-for="entry in games"
+            :key="entry.id"
+            v-model="exportGames"
+            :value="entry.id"
+            :disabled="(gameCounts[entry.id as GameType] ?? 0) === 0"
+            :label="`${entry.name} (${gameCounts[entry.id as GameType] ?? 0})`"
+            color="primary"
+            density="compact"
+            hide-details
+          />
+        </template>
+        <template #actions>
+          <v-spacer />
+          <v-btn @click="exportDialog = false">
+            {{ $t("ui.cancel") }}
+          </v-btn>
+          <v-btn
+            :disabled="exportGames.length === 0"
+            color="primary"
+            @click="doExport"
+          >
+            {{ $t("io.export") }}
+          </v-btn>
+        </template>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-model="importDialog"
+      max-width="400px"
+    >
+      <v-card :title="$t('io.importTitle')">
+        <template #text>
+          <v-checkbox
+            v-for="entry in importAvailableGames"
+            :key="entry.id"
+            v-model="importGames"
+            :value="entry.id"
+            :label="`${entry.name} (${importCounts[entry.id as GameType] ?? 0})`"
+            color="primary"
+            density="compact"
+            hide-details
+          />
+        </template>
+        <template #actions>
+          <v-spacer />
+          <v-btn @click="importDialog = false">
+            {{ $t("ui.cancel") }}
+          </v-btn>
+          <v-btn
+            :disabled="importGames.length === 0"
+            color="primary"
+            @click="doImport"
+          >
+            {{ $t("io.import") }}
+          </v-btn>
+        </template>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 

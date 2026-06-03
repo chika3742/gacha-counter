@@ -144,6 +144,19 @@ progress: "{count} 件の{gacha}を取得しました（{current}/{total}）"
 historyFetched: "{count} 件の履歴を取得しました"
 noNewHistory: 新しい履歴はありません。引いたばかりの場合は、最長1時間後に再度お試しください。
 
+io:
+  import: インポート
+  export: エクスポート
+  exportTitle: エクスポートするゲームを選択
+  importTitle: インポートするゲームを選択
+  exported: "{count} 件の履歴をエクスポートしました。"
+  nothingToExport: エクスポートする履歴がありません。
+  imported: "{imported} 件をインポートしました（重複 {skipped} 件をスキップ）。"
+  importEmpty: ファイルに履歴が含まれていませんでした。
+  importInvalid: インポートできませんでした。有効な履歴ファイルではありません。
+  unsupportedVersion: このファイルの形式バージョンには対応していません。アプリを更新してください。
+  fileTooLarge: ファイルサイズが大きすぎるためインポートできません。
+
 rarity: レアリティ
 itemName: アイテム名
 pityCount: 天井カウント
