@@ -46,6 +46,20 @@ gacha:
     stableChannel: 常設チャンネル
     bangbooChannel: ボンプチャンネル
 
+export:
+  title: 履歴をエクスポート
+  format: エクスポート形式
+  gameNotAvailable: この形式では利用できません
+  formats:
+    gacha-counter:
+      name: 独自形式
+      description: 本アプリにのみインポートできます。
+    uigf:
+      name: UIGF v4.2
+      description: 対応する他のアプリにインポートできます。原神にのみ対応しています。
+  export: エクスポート
+  failed: エクスポートに失敗しました。しばらくしてから再度お試しください。
+
 about:
   title: このアプリについて
   content: |
@@ -137,6 +151,7 @@ fetchAllHistoryDescDuration:
 urlInput: URL入力
 getHistory: 履歴を取得
 clearHistory: 履歴をクリア
+exportHistory: 履歴をエクスポート
 clearHistoryConfirm: 履歴をクリアしますか？この操作は取り消せません。
 historyCleared: 履歴をクリアしました
 preparing: 履歴取得の準備をしています...

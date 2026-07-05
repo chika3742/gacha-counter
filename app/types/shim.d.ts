@@ -8,6 +8,7 @@ type LocalizedText = {
 declare module "~/assets/remote/genshin/data/characters.json" {
   const gCharacters: Record<string, {
     id: string
+    hyvIds: number[]
     name: LocalizedText
     smallImageUrl: string
   }>
@@ -17,6 +18,7 @@ declare module "~/assets/remote/genshin/data/characters.json" {
 declare module "~/assets/remote/genshin/data/weapons.json" {
   const gWeapons: Record<string, {
     id: string
+    hyvId: number
     name: LocalizedText
     imageUrl: string
   }>
