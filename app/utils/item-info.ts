@@ -29,6 +29,21 @@ export const getItemId = (entry: GachaLogEntry) => {
   return findItem(entry)?.id
 }
 
+export const getHyvId = (entry: GachaLogEntry) => {
+  switch (entry.game) {
+    case "genshin":
+      switch (entry.itemType) {
+        case "Character":
+          return gCharacters[entry.name]?.hyvIds[0]
+        case "Weapon":
+          return gWeapons[entry.name]?.hyvId
+      }
+      break
+    default:
+      return undefined
+  }
+}
+
 export const getItemName = (entry: GachaLogEntry) => {
   return findItem(entry)?.name.locales
 }

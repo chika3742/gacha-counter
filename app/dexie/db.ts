@@ -12,6 +12,9 @@ db.version(1).stores({
 db.version(2).stores({
   gachaLogs: "++id, &[game+queryGachaType+remoteId]",
 })
+db.version(3).stores({
+  gachaLogs: "++id, &[game+queryGachaType+remoteId], game",
+})
 
 export const getLatestIdsFromDb = async (game: GameType) => {
   const results = await Promise.all(gachaTypeRecord[game].map(async (gachaType) => {

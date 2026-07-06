@@ -46,6 +46,21 @@ gacha:
     stableChannel: Stable Channel
     bangbooChannel: Bangboo Channel
 
+export:
+  title: Export History
+  format: Export Format
+  gameNotAvailable: Not available for this format
+  formats:
+    gacha-counter:
+      name: Custom Format
+      description: Can only be imported into this app.
+    uigf:
+      name: UIGF v4.2
+      description: Can be imported into other compatible apps. Only supported for Genshin Impact.
+  export: Export
+  gamesToExport: Games to Export
+  failed: Export failed. Please try again later.
+
 about:
   title: About This App
   content: |
@@ -135,6 +150,7 @@ fetchAllHistoryDescDuration:
 urlInput: Enter URL
 getHistory: Fetch History
 clearHistory: Clear History
+exportHistory: Export History
 clearHistoryConfirm: Clear history? This cannot be undone.
 historyCleared: History cleared.
 preparing: Preparing to fetch history...

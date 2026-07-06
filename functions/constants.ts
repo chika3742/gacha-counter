@@ -7,7 +7,7 @@ const hsrEp = "https://public-operation-hkrpg-sg.hoyoverse.com/common/gacha_reco
 const hsrLdEp = "https://public-operation-hkrpg-sg.hoyoverse.com/common/gacha_record/api/getLdGachaLog"
 const zzzEp = "https://public-operation-nap-sg.hoyoverse.com/common/gacha_record/api/getGachaLog"
 
-export const gameTypes = ["hsr", "genshin", "zzz"] as const
+export const gameTypes = ["genshin", "hsr", "zzz"] as const
 export type GameType = typeof gameTypes[number]
 
 export const gachaTypeRecord: Record<GameType, GachaTypeMeta[]> = {

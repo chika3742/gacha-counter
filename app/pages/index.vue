@@ -10,6 +10,7 @@ import Dexie, { liveQuery } from "dexie"
 import type { GachaLogEntry } from "~/types/db.js"
 import CounterRows from "~/components/CounterRows.vue"
 import { gachaTypes } from "~/constants.js"
+import type HistoryExportDialog from "~/components/HistoryExportDialog.vue"
 
 const snackbar = useSnackbar()
 const dialog = useDialog()
@@ -42,6 +43,8 @@ const games = [
     requireLocaleText: true,
   },
 ]
+
+const historyExportDialog = useTemplateRef<InstanceType<typeof HistoryExportDialog>>("historyExportDialog")
 
 const urlRecord = ref({} as Record<GameType, string>)
 const urlError = ref("")
@@ -207,16 +210,24 @@ const clearHistory = () => {
       </div>
       <v-row
         no-gutters
+        justify="end"
         style="gap: 16px"
       >
-        <v-spacer />
         <v-btn
+          prepend-icon="mdi-file-export"
+          @click="historyExportDialog?.reveal"
+        >
+          {{ $t("exportHistory") }}
+        </v-btn>
+        <v-btn
+          prepend-icon="mdi-delete"
           :disabled="processing"
           @click="clearHistory"
         >
           {{ $t("clearHistory") }}
         </v-btn>
         <v-btn
+          prepend-icon="mdi-package-down"
           :loading="processing"
           color="primary"
           @click="getHistory"
@@ -241,6 +252,8 @@ const clearHistory = () => {
         :show-pity-history="fetchAllHistory"
       />
     </article>
+
+    <HistoryExportDialog ref="historyExportDialog" />
   </div>
 </template>
 
