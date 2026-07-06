@@ -21,14 +21,13 @@ const formatSelectItems = computed(() => {
   }))
 })
 
-// eslint-disable-next-line vue/return-in-computed-property
 const availableGames = computed<GameType[]>(() => {
-  switch (selectedFormat.value) {
-    case "gacha-counter":
-      return ["genshin", "hsr", "zzz"]
-    case "uigf":
-      return ["genshin"]
+  const formatToGames: Record<ExportFormat, GameType[]> = {
+    "gacha-counter": ["genshin", "hsr", "zzz"],
+    "uigf": ["genshin"],
   }
+
+  return formatToGames[selectedFormat.value]
 })
 
 const enabledExportButton = computed(() => {
@@ -69,7 +68,7 @@ const proceedExport = async () => {
             </template>
           </v-select>
 
-          <h4>エクスポートするゲーム</h4>
+          <h4>{{ $t('export.gamesToExport') }}</h4>
           <div class="d-flex flex-column">
             <v-checkbox
               v-for="gameType in gameTypes"

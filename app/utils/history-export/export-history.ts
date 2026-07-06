@@ -9,13 +9,12 @@ export const exportHistory = async (format: ExportFormat, games: GameType[]): Pr
   if (games.length === 0) {
     throw new Error("No games selected for export")
   }
-  console.log(games[0], games.slice(-1)[0]);
-  
+
   const entries = await db.gachaLogs
-      .where("game")
-      .anyOf(games)
-      .toArray()
-      
+    .where("game")
+    .anyOf(games)
+    .toArray()
+
   let output: string
   switch (format) {
     case "uigf":

@@ -1,6 +1,6 @@
-import { groupBy } from "es-toolkit";
-import type { GachaLogEntry } from "~/types/db";
-import type { Entries, GachaExport } from "~/types/gacha-export.g";
+import { groupBy } from "es-toolkit"
+import type { GachaLogEntry } from "~/types/db"
+import type { Entries, GachaExport } from "~/types/gacha-export.g"
 
 export const mapToOriginalFormat = (input: GachaLogEntry[]): GachaExport => {
   const grouped = groupBy(input, e => e.game)
@@ -18,7 +18,7 @@ export const mapToOriginalFormat = (input: GachaLogEntry[]): GachaExport => {
         time: e.time,
         uid: e.uid,
       } satisfies Entries[number])),
-    ])
+    ]),
   )
 
   return {

@@ -58,6 +58,7 @@ export:
       name: UIGF v4.2
       description: 対応する他のアプリにインポートできます。原神にのみ対応しています。
   export: エクスポート
+  gamesToExport: エクスポートするゲーム
   failed: エクスポートに失敗しました。しばらくしてから再度お試しください。
 
 about:

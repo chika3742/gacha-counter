@@ -1,7 +1,6 @@
 import type { GachaLogEntry } from "~/types/db.js"
 import type { Uigf42 } from "~/types/uigf-4.2.g.js"
 import { groupBy } from "es-toolkit"
-import { getHyvId } from "~/utils/item-info.js"
 
 export const mapToUigf = (input: GachaLogEntry[]): Uigf42 => {
   const grouped = groupBy(input, e => e.game)
@@ -28,7 +27,7 @@ const mapGenshin = (entries: GachaLogEntry[]): NonNullable<Uigf42["hk4e"]>[numbe
   return {
     uid: entries[0]!.uid,
     lang: entries[0]!.lang as any,
-    timezone: new Date().getTimezoneOffset(),
+    timezone: getTimezoneByUid(entries[0]!.uid),
     list: entries.map(e => ({
       id: e.remoteId,
       item_id: getHyvId(e)!.toString(),
