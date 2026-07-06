@@ -8,7 +8,7 @@ export const getTimezoneByUid = (uid: string): number => {
     18: 8, // Asia
     9: 8, // TW, HK, MO
     6: -5, // America
-    7: -1, // Europe
+    7: 1, // Europe
   }
 
   for (const [prefix, tz] of Object.entries(uidPrefixToTimezone)) {

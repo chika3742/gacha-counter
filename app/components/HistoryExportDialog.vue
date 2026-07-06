@@ -30,13 +30,17 @@ const availableGames = computed<GameType[]>(() => {
   return formatToGames[selectedFormat.value]
 })
 
+const supportedSelectedGames = computed(() => {
+  return availableGames.value.filter(e => selectedGames.value.includes(e))
+})
+
 const enabledExportButton = computed(() => {
-  return availableGames.value.some(e => selectedGames.value.includes(e))
+  return supportedSelectedGames.value.length >= 1
 })
 
 const proceedExport = async () => {
   try {
-    await exportHistory(selectedFormat.value, selectedGames.value)
+    await exportHistory(selectedFormat.value, supportedSelectedGames.value)
     cancel()
   } catch (e) {
     console.error(e)

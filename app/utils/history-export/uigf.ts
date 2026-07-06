@@ -28,16 +28,23 @@ const mapGenshin = (entries: GachaLogEntry[]): NonNullable<Uigf42["hk4e"]>[numbe
     uid: entries[0]!.uid,
     lang: entries[0]!.lang as any,
     timezone: getTimezoneByUid(entries[0]!.uid),
-    list: entries.map(e => ({
-      id: e.remoteId,
-      item_id: getHyvId(e)!.toString(),
-      time: e.time,
-      uigf_gacha_type: e.queryGachaType as any,
-      gacha_type: e.gachaType as any,
-      item_type: e.itemType,
-      name: e.name,
-      rank_type: e.rankType,
-      count: "1",
-    })),
+    list: entries.map((e) => {
+      const hyvId = getHyvId(e)?.toString()
+      if (!hyvId) {
+        throw new Error(`Failed to get internal item id for entry: ${JSON.stringify(e)}`)
+      }
+
+      return {
+        id: e.remoteId,
+        item_id: hyvId,
+        time: e.time,
+        uigf_gacha_type: e.queryGachaType as any,
+        gacha_type: e.gachaType as any,
+        item_type: e.itemType,
+        name: e.name,
+        rank_type: e.rankType,
+        count: "1",
+      }
+    }),
   }
 }

@@ -1,7 +1,6 @@
 import { db } from "~/dexie/db.js"
 import type { ExportFormat } from "~/types/history-export.js"
 import type { GameType } from "~~/functions/constants.js"
-import Dexie from "dexie"
 import { mapToUigf } from "./uigf"
 import { mapToOriginalFormat } from "./original-format"
 
@@ -23,8 +22,6 @@ export const exportHistory = async (format: ExportFormat, games: GameType[]): Pr
     case "gacha-counter":
       output = JSON.stringify(mapToOriginalFormat(entries), null, 2)
       break
-    default:
-      throw new Error(`Unsupported export format: ${format}`)
   }
   const blob = new Blob([output], { type: "application/json" })
   const date = new Date().toISOString().slice(0, 10)
@@ -33,5 +30,5 @@ export const exportHistory = async (format: ExportFormat, games: GameType[]): Pr
   a.href = url
   a.download = `gacha-history-${format}-${date}.json`
   a.click()
-  URL.revokeObjectURL(url)
+  setTimeout(() => URL.revokeObjectURL(url), 0)
 }
