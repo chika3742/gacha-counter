@@ -210,9 +210,9 @@ const clearHistory = () => {
       </div>
       <v-row
         no-gutters
+        justify="end"
         style="gap: 16px"
       >
-        <v-spacer />
         <v-btn
           prepend-icon="mdi-file-export"
           @click="historyExportDialog?.reveal"
