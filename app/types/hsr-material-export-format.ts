@@ -1,4 +1,4 @@
-import z from "zod";
+import z from "zod"
 
 export const HsrMaterialExportFormat = z.object({
   schemaVersion: z.literal(1),
@@ -16,8 +16,8 @@ export const HsrMaterialExportFormat = z.object({
       name: z.string(),
       itemType: z.enum(["キャラクター", "光円錐"]),
       rankType: z.enum(["3", "4", "5"]),
-    }))
-  }))
+    })),
+  })),
 })
 
 export type HsrMaterialExportFormat = z.infer<typeof HsrMaterialExportFormat>

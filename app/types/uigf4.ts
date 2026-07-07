@@ -1,4 +1,4 @@
-import z from "zod";
+import z from "zod"
 
 export const Uigf4 = z.object({
   info: z.object({
@@ -25,7 +25,7 @@ export const Uigf4 = z.object({
       "tr-tr",
       "vi-vn",
       "zh-cn",
-      "zh-tw"
+      "zh-tw",
     ]).optional(),
     list: z.array(z.object({
       uigf_gacha_type: z.string().regex(/^\d+$/),
@@ -37,8 +37,8 @@ export const Uigf4 = z.object({
       item_type: z.string().optional(),
       rank_type: z.string().optional(),
       id: z.string().regex(/^\d+$/),
-    }))
-  })).optional()
+    })),
+  })).optional(),
 })
 
 export type Uigf4 = z.input<typeof Uigf4>

@@ -18,15 +18,15 @@ export type ValidationResult = {
     gachaCount: number
     uid: string
     error?: HistoryImportErrorCode
-  }[],
-  dbEntries: GachaLogEntryInsertable[],
+  }[]
+  dbEntries: GachaLogEntryInsertable[]
 } | {
   uidPromptRequired: true
   pendingParsedData: HsrMaterialExportFormat
 }
 
-export type ValidationResultUidPromptRequired = Exclude<ValidationResult, {format: unknown}>
-export type ValidationResultSuccess = Exclude<ValidationResult, {uidPromptRequired: unknown}>
+export type ValidationResultUidPromptRequired = Exclude<ValidationResult, { format: unknown }>
+export type ValidationResultSuccess = Exclude<ValidationResult, { uidPromptRequired: unknown }>
 
 export const readAndValidateHistory = async (file: File): Promise<ValidationResult> => {
   const text = await file.text()
@@ -34,6 +34,7 @@ export const readAndValidateHistory = async (file: File): Promise<ValidationResu
   try {
     data = JSON.parse(text)
   } catch (error) {
+    console.error(error)
     throw new HistoryImportError("invalid-json")
   }
 
@@ -42,7 +43,7 @@ export const readAndValidateHistory = async (file: File): Promise<ValidationResu
     ?? await parseUigfFormat(data)
     ?? (() => {
       throw new HistoryImportError("invalid-schema")
-    })();
+    })()
 }
 
 const parseInternalFormat = async (data: unknown): Promise<ValidationResult | null> => {
@@ -63,7 +64,7 @@ const parseInternalFormat = async (data: unknown): Promise<ValidationResult | nu
         gameType: game as GameType,
         gachaCount: entries.length,
         uid,
-        error: "uid-mismatch"
+        error: "uid-mismatch",
       })
       continue
     }
@@ -74,7 +75,7 @@ const parseInternalFormat = async (data: unknown): Promise<ValidationResult | nu
       uid,
     })
 
-    dbEntries.push(...entries.map((e) => ({
+    dbEntries.push(...entries.map(e => ({
       remoteId: e.id,
       name: e.name,
       rankType: e.rankType,
@@ -112,8 +113,8 @@ export const continueParsingHsrFormat = async (parsed: HsrMaterialExportFormat, 
   const flattened = parsed.banners.flatMap(banner => banner.warps)
 
   const itemTypeMap = {
-    "キャラクター": "Character",
-    "光円錐": "Light Cone"
+    キャラクター: "Character",
+    光円錐: "Light Cone",
   }
 
   const mapItemName = (name: string, itemType: string): string => {
@@ -148,7 +149,7 @@ export const continueParsingHsrFormat = async (parsed: HsrMaterialExportFormat, 
   try {
     dbEntries = await mapDbEntries()
   } catch (e) {
-    console.error(e);
+    console.error(e)
     error = e instanceof HistoryImportError ? e.code : "unknown"
   }
 
@@ -166,9 +167,9 @@ export const continueParsingHsrFormat = async (parsed: HsrMaterialExportFormat, 
 }
 
 const parseUigfFormat = async (data: unknown): Promise<ValidationResult | null> => {
-  const { success, data: parsed } = Uigf4.safeParse(data);
+  const { success, data: parsed } = Uigf4.safeParse(data)
   if (!success) {
-    return null;
+    return null
   }
 
   if (!parsed.hk4e) {
@@ -216,7 +217,7 @@ const parseUigfFormat = async (data: unknown): Promise<ValidationResult | null> 
     try {
       mappedEntries = await mapDbEntries()
     } catch (e) {
-      console.error(e);
+      console.error(e)
       if (e instanceof HistoryImportError) {
         error = e.code
       } else {

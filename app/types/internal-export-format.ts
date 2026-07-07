@@ -1,4 +1,4 @@
-import z from "zod";
+import z from "zod"
 
 const GameEntry = z.array(z.object({
   id: z.string().regex(/^\d+$/),

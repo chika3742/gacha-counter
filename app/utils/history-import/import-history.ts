@@ -8,9 +8,9 @@ import type { GachaLogEntryInsertable } from "./read-and-validate"
  */
 export const importHistory = async (entries: GachaLogEntryInsertable[]): Promise<number> => {
   let failures = 0
-  await db.gachaLogs.bulkAdd(entries).catch("BulkError", err => {
+  await db.gachaLogs.bulkAdd(entries).catch("BulkError", (err) => {
     failures = err.failures.length
   })
-  
+
   return entries.length - failures
 }
