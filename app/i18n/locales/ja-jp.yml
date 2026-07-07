@@ -71,6 +71,7 @@ import:
   uidValidation: 9文字以上の数字で入力してください
   gachaCount: ガチャ件数
   imported: "{count} 件の履歴をインポートしました"
+  exportedAt: エクスポート時刻
   notes:
     uigf: UIGF形式のインポートは、原神のみに対応しています。
     gacha-counter: ""
@@ -80,6 +81,8 @@ import:
     invalid-schema: サポートされている形式かどうかご確認ください。
     invalid-json: インポートするファイルが正しくありません。正しい形式のファイルを読み込ませてください。
     item-mapping-failed: アイテムIDのマッピングに失敗しました。しばらく待ってからもう一度お試しください。改善しない場合は、開発者にお問い合わせください。
+    cannotImportMultipleAccounts: 同じゲームの複数のアカウントの履歴をインポートすることはできません。このアカウントをインポートするには、既に選択されているアカウントのチェックを外してください。
+    failed: インポートに失敗しました。
 
 about:
   title: このアプリについて

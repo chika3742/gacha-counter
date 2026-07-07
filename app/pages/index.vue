@@ -171,6 +171,9 @@ const showFilePicker = () => new Promise<File | null>((resolve) => {
   input.onchange = () => {
     resolve(input.files?.item(0) ?? null)
   }
+  input.oncancel = () => {
+    resolve(null)
+  }
   input.click()
 })
 
