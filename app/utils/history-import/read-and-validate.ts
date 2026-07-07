@@ -175,7 +175,7 @@ const parseUigfFormat = async (data: unknown): Promise<ValidationResult | null> 
   if (!parsed.hk4e) {
     return {
       format: "uigf",
-      exportedAt: new Date(parsed.info.export_timestamp),
+      exportedAt: new Date(parsed.info.export_timestamp * 1000),
       games: [],
       dbEntries: [],
     }
@@ -237,7 +237,7 @@ const parseUigfFormat = async (data: unknown): Promise<ValidationResult | null> 
 
   return {
     format: "uigf",
-    exportedAt: new Date(parsed.info.export_timestamp),
+    exportedAt: new Date(parsed.info.export_timestamp * 1000),
     games,
     dbEntries,
   }
