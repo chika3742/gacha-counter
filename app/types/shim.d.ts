@@ -11,6 +11,7 @@ declare module "~/assets/remote/genshin/data/characters.json" {
     hyvIds: number[]
     name: LocalizedText
     smallImageUrl: string
+    rarity: number
   }>
   export default gCharacters
 }
@@ -21,6 +22,7 @@ declare module "~/assets/remote/genshin/data/weapons.json" {
     hyvId: number
     name: LocalizedText
     imageUrl: string
+    rarity: number
   }>
   export default gWeapons
 }

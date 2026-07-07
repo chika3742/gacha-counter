@@ -1,8 +1,8 @@
 import { groupBy } from "es-toolkit"
 import type { GachaLogEntry } from "~/types/db"
-import type { Entries, GachaExport } from "~/types/gacha-export.g"
+import type { ExportGameEntry, InternalExportFormat } from "~/types/internal-export-format"
 
-export const mapToOriginalFormat = (input: GachaLogEntry[]): GachaExport => {
+export const mapToInternalFormat = (input: GachaLogEntry[]): InternalExportFormat => {
   const grouped = groupBy(input, e => e.game)
   const mapped = Object.fromEntries(
     Object.entries(grouped).map(([game, entries]) => [
@@ -17,7 +17,7 @@ export const mapToOriginalFormat = (input: GachaLogEntry[]): GachaExport => {
         rankType: e.rankType,
         time: e.time,
         uid: e.uid,
-      } satisfies Entries[number])),
+      } satisfies ExportGameEntry)),
     ]),
   )
 

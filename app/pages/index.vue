@@ -11,6 +11,10 @@ import type { GachaLogEntry } from "~/types/db.js"
 import CounterRows from "~/components/CounterRows.vue"
 import { gachaTypes } from "~/constants.js"
 import type HistoryExportDialog from "~/components/HistoryExportDialog.vue"
+import { continueParsingHsrFormat, readAndValidateHistory } from "~/utils/history-import/read-and-validate"
+import { HistoryImportError } from "~/utils/history-import/history-import-error"
+import type HistoryImportDialog from "~/components/HistoryImportDialog.vue"
+import type HistoryImportUidPromptDialog from "~/components/HistoryImportUidPromptDialog.vue"
 
 const snackbar = useSnackbar()
 const dialog = useDialog()
@@ -45,6 +49,8 @@ const games = [
 ]
 
 const historyExportDialog = useTemplateRef<InstanceType<typeof HistoryExportDialog>>("historyExportDialog")
+const historyImportDialog = useTemplateRef<InstanceType<typeof HistoryImportDialog>>("historyImportDialog")
+const uidInputDialog = useTemplateRef<InstanceType<typeof HistoryImportUidPromptDialog>>("uidInputDialog")
 
 const urlRecord = ref({} as Record<GameType, string>)
 const urlError = ref("")
@@ -88,7 +94,7 @@ const history = computed(() => {
     liveQuery(() => db.gachaLogs
       .where("[game+queryGachaType+remoteId]")
       .between([game], [game, Dexie.maxKey, Dexie.maxKey])
-      .toArray()) as any,
+      .sortBy("-remoteId")) as any,
   )
 })
 
@@ -157,6 +163,39 @@ const clearHistory = () => {
     },
   )
 }
+
+const showFilePicker = () => new Promise<File | null>((resolve) => {
+  const input = document.createElement("input")
+  input.type = "file"
+  input.accept = "application/json"
+  input.onchange = () => {
+    resolve(input.files?.item(0) ?? null)
+  }
+  input.click()
+})
+
+const importHistory = async () => {
+  const file = await showFilePicker()
+  if (!file) {
+    return
+  }
+
+  try {
+    let validationResult = await readAndValidateHistory(file)
+    if ("uidPromptRequired" in validationResult) {
+      const uid = await uidInputDialog.value?.reveal()
+      if (!uid) {
+        return
+      }
+      validationResult = await continueParsingHsrFormat(validationResult.pendingParsedData, uid)
+    }
+
+    historyImportDialog.value?.reveal(validationResult)
+  } catch (e) {
+    console.error(e)
+    snackbar.show(i18n.t(`import.errors.${e instanceof HistoryImportError ? e.code : "unknown"}`), "error")
+  }
+}
 </script>
 
 <template>
@@ -214,6 +253,12 @@ const clearHistory = () => {
         style="gap: 16px"
       >
         <v-btn
+          prepend-icon="mdi-file-import"
+          @click="importHistory"
+        >
+          {{ $t("importHistory") }}
+        </v-btn>
+        <v-btn
           prepend-icon="mdi-file-export"
           @click="historyExportDialog?.reveal"
         >
@@ -254,6 +299,8 @@ const clearHistory = () => {
     </article>
 
     <HistoryExportDialog ref="historyExportDialog" />
+    <HistoryImportDialog ref="historyImportDialog" />
+    <HistoryImportUidPromptDialog ref="uidInputDialog" />
   </div>
 </template>
 

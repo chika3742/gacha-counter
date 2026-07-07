@@ -2,7 +2,7 @@ import { db } from "~/dexie/db.js"
 import type { ExportFormat } from "~/types/history-export.js"
 import type { GameType } from "~~/functions/constants.js"
 import { mapToUigf } from "./uigf"
-import { mapToOriginalFormat } from "./original-format"
+import { mapToInternalFormat } from "./internal-format"
 
 export const exportHistory = async (format: ExportFormat, games: GameType[]): Promise<void> => {
   if (games.length === 0) {
@@ -20,7 +20,7 @@ export const exportHistory = async (format: ExportFormat, games: GameType[]): Pr
       output = JSON.stringify(mapToUigf(entries), null, 2)
       break
     case "gacha-counter":
-      output = JSON.stringify(mapToOriginalFormat(entries), null, 2)
+      output = JSON.stringify(mapToInternalFormat(entries), null, 2)
       break
   }
   const blob = new Blob([output], { type: "application/json" })

@@ -52,7 +52,7 @@ export:
   gameNotAvailable: Not available for this format
   formats:
     gacha-counter:
-      name: Custom Format
+      name: Internal Format
       description: Can only be imported into this app.
     uigf:
       name: UIGF v4.2
