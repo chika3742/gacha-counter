@@ -59,34 +59,47 @@ const parseInternalFormat = async (data: unknown): Promise<ValidationResult | nu
       continue
     }
     const uid = entries[0]!.uid
-    if (!await verifyUid(game as GameType, uid)) {
-      games.push({
-        gameType: game as GameType,
-        gachaCount: entries.length,
+
+    const mapDbEntries = async () => {
+      // The first UID does not match
+      if (!await verifyUid(game as GameType, uid)) {
+        throw new HistoryImportError("uid-mismatch")
+      }
+      // UID is inconsistent
+      if (entries.some(e => e.uid !== uid)) {
+        throw new HistoryImportError("uid-mismatch")
+      }
+
+      return entries.map(e => ({
+        remoteId: e.id,
+        name: e.name,
+        rankType: e.rankType,
+        itemType: e.itemType,
+        queryGachaType: e.queryGachaType,
+        gachaType: e.gachaType,
         uid,
-        error: "uid-mismatch",
-      })
-      continue
+        time: e.time,
+        lang: e.lang,
+        game: game as GameType,
+      }))
     }
 
+    let mapped: GachaLogEntryInsertable[] = []
+    let error: HistoryImportErrorCode | undefined = undefined
+    try {
+      mapped = await mapDbEntries()
+    } catch (e) {
+      console.error(e);
+      error = e instanceof HistoryImportError ? e.code : "unknown"
+    }
     games.push({
       gameType: game as GameType,
       gachaCount: entries.length,
       uid,
+      error,
     })
 
-    dbEntries.push(...entries.map(e => ({
-      remoteId: e.id,
-      name: e.name,
-      rankType: e.rankType,
-      itemType: e.itemType,
-      queryGachaType: e.queryGachaType,
-      gachaType: e.gachaType,
-      uid,
-      time: e.time,
-      lang: e.lang,
-      game: game as GameType,
-    })))
+    dbEntries.push(...mapped)
   }
 
   return {
