@@ -89,7 +89,7 @@ const parseInternalFormat = async (data: unknown): Promise<ValidationResult | nu
     try {
       mapped = await mapDbEntries()
     } catch (e) {
-      console.error(e);
+      console.error(e)
       error = e instanceof HistoryImportError ? e.code : "unknown"
     }
     games.push({
