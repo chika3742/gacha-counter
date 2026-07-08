@@ -5,7 +5,7 @@ import { InternalExportFormat } from "~/types/internal-export-format"
 import { HsrMaterialExportFormat } from "~/types/hsr-material-export-format"
 import hCharacters from "~/assets/remote/hsr/data/characters.json"
 import hLightCones from "~/assets/remote/hsr/data/light-cones.json"
-import { db, getLastLog } from "~/dexie/db"
+import { getLastLog } from "~/dexie/db"
 import { Uigf4 } from "~/types/uigf4"
 import type { ImportFormat } from "~/types/history-export"
 
