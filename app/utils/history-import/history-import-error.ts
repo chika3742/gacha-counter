@@ -3,6 +3,7 @@ export type HistoryImportErrorCode
     | "invalid-schema"
     | "item-mapping-failed"
     | "uid-mismatch"
+    | "lang-mismatch"
     | "unknown"
 
 export class HistoryImportError extends Error {

@@ -70,6 +70,14 @@ const parseInternalFormat = async (data: unknown): Promise<ValidationResult | nu
         throw new HistoryImportError("uid-mismatch")
       }
 
+      // Validate if zenless zone zero entries consistently have the same language as the last log entry
+      if (game == "zzz") {
+        const lastLogLang = (await getLastLog("zzz"))?.lang
+        if (lastLogLang && entries.some(e => e.lang !== lastLogLang)) {
+          throw new HistoryImportError("lang-mismatch")
+        }
+      }
+
       return entries.map(e => ({
         remoteId: e.id,
         name: e.name,
@@ -110,12 +118,13 @@ const parseInternalFormat = async (data: unknown): Promise<ValidationResult | nu
   }
 }
 
-const parseHsrFormat = async (data: unknown): Promise<ValidationResult | null> => {
+const parseHsrFormat = async (data: unknown): Promise<ValidationResultUidPromptRequired | null> => {
   const { success, data: parsed } = HsrMaterialExportFormat.safeParse(data)
   if (!success) {
     return null
   }
 
+  // Exported data by hsr-material don't have UID information, so prompt to user
   return {
     uidPromptRequired: true,
     pendingParsedData: parsed,
@@ -125,6 +134,7 @@ const parseHsrFormat = async (data: unknown): Promise<ValidationResult | null> =
 export const continueParsingHsrFormat = async (parsed: HsrMaterialExportFormat, uid: string): Promise<ValidationResultSuccess> => {
   const flattened = parsed.banners.flatMap(banner => banner.warps)
 
+  // noinspection NonAsciiCharacters
   const itemTypeMap = {
     キャラクター: "Character",
     光円錐: "Light Cone",
@@ -258,6 +268,7 @@ const parseUigfFormat = async (data: unknown): Promise<ValidationResult | null> 
 
 /**
  * Verifies if the given UID matches the latest row in the gacha log for the specified game.
+ * @param game Game type to verify
  * @param uid Input UID
  */
 const verifyUid = async (game: GameType, uid: string): Promise<boolean> => {
