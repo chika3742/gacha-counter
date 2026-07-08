@@ -59,7 +59,7 @@ const proceedImport = async () => {
     snackbar.show(i18n.t("import.imported", { count }))
   } catch (e) {
     console.error(e)
-    snackbar.show(i18n.t("import.errors.failed"), "error")
+    snackbar.show(i18n.t("import.errors.unknown"), "error")
   }
   cancel()
 }

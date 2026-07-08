@@ -61,6 +61,29 @@ export:
   gamesToExport: Games to Export
   failed: Export failed. Please try again later.
 
+import:
+  title: Import History
+  desc: Identical history entries will be skipped, not overwritten.
+  import: Import
+  uidInput: Enter the UID of the Exported History
+  uidInputInstruction: 'Enter the UID of the gacha history that was recorded when you exported it from "Honkai: Star Rail Material Note".'
+  uid: UID
+  uidValidation: Enter a number with at least 9 digits
+  gachaCount: Entry Count
+  imported: "Imported {count} history item | Imported {count} history items"
+  exportedAt: Exported at
+  notes:
+    uigf: UIGF-format import is only supported for Genshin Impact.
+    gacha-counter: ""
+    hsr-material: Make sure the UID you entered is correct. If it is wrong, the history cannot be fetched (synced).
+  errors:
+    uid-mismatch: The UID does not match that of the existing history. Clear the history or load a file with the correct UID.
+    invalid-schema: Please check that the file is in a supported format.
+    invalid-json: The file to import is invalid. Please load a file in a correct format.
+    item-mapping-failed: Failed to map item IDs. Please wait a while and try again. If the issue persists, contact the developer.
+    cannotImportMultipleAccounts: History of multiple accounts for the same game cannot be imported. To import this account, uncheck the currently selected account.
+    unknown: An unknown error occurred. Please try again.
+
 about:
   title: About This App
   content: |
@@ -73,12 +96,18 @@ about:
     ## About Probability Calculation
     "Chance to get a ☆5 in the next 10-pull" refers to the probability that, based on the number of attempts since the last ☆5 drop, you will get at least one ☆5 within the next 10 attempts.
     This calculation takes into account the "soft pity" (increased probability from the 74th attempt onward) known from community statistics for Genshin Impact ([Reference](https://gachaguide.com/genshin_probabilities)).
-    On this site, we assume a similar increase exists in Honkai: Star Rail and compute accordingly.
+    On this site, we assume a similar increase exists in Honkai: Star Rail and Zenless Zone Zero and compute accordingly.
     
     ## About Off-banner Rate Calculation
     To display the off-banner rate (how often you "lose the 50/50"), you need to enable the pity count history.
     The off-banner rate is calculated when there are at least __2 or more__ recorded ☆5 drops in the history.
     If the oldest ☆5 drop record was not off-banner (i.e., it was the featured item), that record is __excluded__ from the calculation.
+
+    ## About History Import
+    The following formats are supported:
+    - The internal format exported by this app
+    - [UIGF](https://uigf.org) v4.0–4.2 (Genshin Impact only)
+    - Files exported from "Honkai: Star Rail Material Note"
 
     ## Important Notes
     - <span class="text-warning font-weight-bold">The URL expires after 24 hours. When it does, obtain a new one using the same method.</span>
@@ -150,6 +179,7 @@ fetchAllHistoryDescDuration:
 urlInput: Enter URL
 getHistory: Fetch History
 clearHistory: Clear History
+importHistory: Import History
 exportHistory: Export History
 clearHistoryConfirm: Clear history? This cannot be undone.
 historyCleared: History cleared.
