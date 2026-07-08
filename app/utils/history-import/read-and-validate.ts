@@ -5,7 +5,7 @@ import { InternalExportFormat } from "~/types/internal-export-format"
 import { HsrMaterialExportFormat } from "~/types/hsr-material-export-format"
 import hCharacters from "~/assets/remote/hsr/data/characters.json"
 import hLightCones from "~/assets/remote/hsr/data/light-cones.json"
-import { db } from "~/dexie/db"
+import { db, getLastLog } from "~/dexie/db"
 import { Uigf4 } from "~/types/uigf4"
 import type { ImportFormat } from "~/types/history-export"
 
@@ -30,7 +30,7 @@ export type ValidationResultSuccess = Exclude<ValidationResult, { uidPromptRequi
 
 export const readAndValidateHistory = async (file: File): Promise<ValidationResult> => {
   const text = await file.text()
-  let data: unknown[]
+  let data: unknown
   try {
     data = JSON.parse(text)
   } catch (error) {
@@ -261,6 +261,6 @@ const parseUigfFormat = async (data: unknown): Promise<ValidationResult | null> 
  * @param uid Input UID
  */
 const verifyUid = async (game: GameType, uid: string): Promise<boolean> => {
-  const entry = await db.gachaLogs.where("game").equals(game).last()
+  const entry = await getLastLog(game)
   return !entry || entry.uid === uid
 }

@@ -5,6 +5,9 @@ export const useDialogState = <T = void, R = void>() => {
   let pendingResolve: ((value: R | null) => void) | null = null
 
   const reveal = (args?: T): Promise<R | null> => {
+    if (isRevealed.value) {
+      return Promise.resolve(null)
+    }
     _args.value = args
     isRevealed.value = true
 
