@@ -28,6 +28,21 @@ export type ValidationResult = {
 export type ValidationResultUidPromptRequired = Exclude<ValidationResult, { format: unknown }>
 export type ValidationResultSuccess = Exclude<ValidationResult, { uidPromptRequired: unknown }>
 
+/**
+ * Runs a mapping function and captures any {@link HistoryImportError} as an error code
+ * instead of throwing, so that other games/accounts can still be imported.
+ */
+const tryMapEntries = async (
+  mapDbEntries: () => Promise<GachaLogEntryInsertable[]>,
+): Promise<{ entries: GachaLogEntryInsertable[], error?: HistoryImportErrorCode }> => {
+  try {
+    return { entries: await mapDbEntries() }
+  } catch (e) {
+    console.error(e)
+    return { entries: [], error: e instanceof HistoryImportError ? e.code : "unknown" }
+  }
+}
+
 export const readAndValidateHistory = async (file: File): Promise<ValidationResult> => {
   const text = await file.text()
   let data: unknown
@@ -92,14 +107,7 @@ const parseInternalFormat = async (data: unknown): Promise<ValidationResult | nu
       }))
     }
 
-    let mapped: GachaLogEntryInsertable[] = []
-    let error: HistoryImportErrorCode | undefined = undefined
-    try {
-      mapped = await mapDbEntries()
-    } catch (e) {
-      console.error(e)
-      error = e instanceof HistoryImportError ? e.code : "unknown"
-    }
+    const { entries: mapped, error } = await tryMapEntries(mapDbEntries)
     games.push({
       gameType: game as GameType,
       gachaCount: entries.length,
@@ -167,14 +175,7 @@ export const continueParsingHsrFormat = async (parsed: HsrMaterialExportFormat, 
     }))
   }
 
-  let dbEntries: GachaLogEntryInsertable[] = []
-  let error: HistoryImportErrorCode | undefined
-  try {
-    dbEntries = await mapDbEntries()
-  } catch (e) {
-    console.error(e)
-    error = e instanceof HistoryImportError ? e.code : "unknown"
-  }
+  const { entries: dbEntries, error } = await tryMapEntries(mapDbEntries)
 
   return {
     format: "hsr-material",
@@ -235,18 +236,7 @@ const parseUigfFormat = async (data: unknown): Promise<ValidationResult | null> 
       })
     }
 
-    let mappedEntries: typeof dbEntries = []
-    let error: HistoryImportErrorCode | undefined
-    try {
-      mappedEntries = await mapDbEntries()
-    } catch (e) {
-      console.error(e)
-      if (e instanceof HistoryImportError) {
-        error = e.code
-      } else {
-        error = "unknown"
-      }
-    }
+    const { entries: mappedEntries, error } = await tryMapEntries(mapDbEntries)
 
     games.push({
       gameType: "genshin",
