@@ -93,8 +93,8 @@ const history = computed(() => {
   return useObservable<GachaLogEntry[]>(
     liveQuery(() => db.gachaLogs
       .where("[game+queryGachaType+remoteId]")
-      .between([game], [game, Dexie.maxKey, Dexie.maxKey])
-      .sortBy("-remoteId")) as any,
+      .between([game], [game, Dexie.maxKey, Dexie.maxKey]) // sorted
+      .toArray()) as any,
   )
 })
 
