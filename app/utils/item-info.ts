@@ -73,3 +73,12 @@ export const getItemImage = (entry: GachaLogEntry) => {
       break
   }
 }
+
+export const CHARACTER_ID_LENGTH = 8
+
+export const findGItemById = (id: string): { name: LocalizedText, rarity: number } | undefined => {
+  const list = id.length === CHARACTER_ID_LENGTH ? gCharacters : gWeapons
+  return Object.values(list).find((e) => {
+    return "hyvId" in e ? e.hyvId?.toString() === id : e.hyvIds?.[0]?.toString() === id
+  })
+}

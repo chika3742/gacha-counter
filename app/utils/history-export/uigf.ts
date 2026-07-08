@@ -1,8 +1,8 @@
 import type { GachaLogEntry } from "~/types/db.js"
-import type { Uigf42 } from "~/types/uigf-4.2.g.js"
 import { groupBy } from "es-toolkit"
+import type { Uigf4 } from "~/types/uigf4"
 
-export const mapToUigf = (input: GachaLogEntry[]): Uigf42 => {
+export const mapToUigf = (input: GachaLogEntry[]): Uigf4 => {
   const grouped = groupBy(input, e => e.game)
 
   const genshin = mapGenshin(grouped["genshin"] ?? [])
@@ -19,7 +19,7 @@ export const mapToUigf = (input: GachaLogEntry[]): Uigf42 => {
   }
 }
 
-const mapGenshin = (entries: GachaLogEntry[]): NonNullable<Uigf42["hk4e"]>[number] | null => {
+const mapGenshin = (entries: GachaLogEntry[]): NonNullable<Uigf4["hk4e"]>[number] | null => {
   if (entries.length === 0) {
     return null
   }
