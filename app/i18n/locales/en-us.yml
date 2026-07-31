@@ -103,6 +103,10 @@ about:
     The off-banner rate is calculated when there are at least __2 or more__ recorded ☆5 drops in the history.
     If the oldest ☆5 drop record was not off-banner (i.e., it was the featured item), that record is __excluded__ from the calculation.
 
+    Additionally, Genshin Impact's "Capturing Radiance" (the guaranteed pickup after 3 consecutive off-banner losses) is taken into account, and such pickups are __excluded__ from the denominator. If the oldest portion of the record shows only 2 or fewer consecutive off-banner losses, the next pickup is treated as if Capturing Radiance did NOT activate.
+
+    <div id="miss-rate-diagram"></div>
+
     ## About History Import
     The following formats are supported:
     - The internal format exported by this app
@@ -114,6 +118,36 @@ about:
     - <span class="text-warning font-weight-bold">Currently there is no method to obtain the URL using only an Android device.</span>
     - The developer assumes no liability for any damages arising from the use of this site.
     - While we may collect aggregate statistics such as page views, we do NOT collect the URLs you obtain via the methods below, nor any data retrieved through them. We also have no plans to display advertisements.
+  missRateDiagram:
+    legend:
+      miss: Off-banner (counted)
+      win: 50/50 win (counted)
+      excluded: Excluded
+    labels:
+      miss: Off-banner
+      guaranteed: Guaranteed PU
+      fiftyFifty: |-
+        PU
+        (50/50 win)
+      unknown: |-
+        PU
+        (unknown)
+      capturingRadiance: |-
+        Capturing
+        Radiance PU
+    cases:
+      case1:
+        title: "Case 1: Oldest is off-banner (normal)"
+        description: The pickup right after an off-banner is always a "guaranteed PU", so it is excluded from the denominator.
+        formula: Off-banner rate = 2 ÷ 3 ≒ 66.7%
+      case2:
+        title: "Case 2: Oldest is a pickup"
+        description: Without the preceding history, we can't tell whether it was a guaranteed pull or a 50/50 win — so it is excluded from the denominator.
+        formula: Off-banner rate = 1 ÷ 2 = 50%
+      case3:
+        title: "Case 3: Guaranteed by Capturing Radiance"
+        description: After 3 consecutive 50/50 losses (each followed by its normal guaranteed PU), the following pickup becomes a Capturing Radiance guarantee and is excluded from the denominator.
+        formula: Off-banner rate = 3 ÷ 3 = 100%
 
 howToGetUrl:
   windows:

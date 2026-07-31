@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { CustomMarked } from "~/libs/custom-marked.js"
 import CopyBtn from "~/components/CopyBtn.vue"
+import MissRateDiagram from "~/components/MissRateDiagram.vue"
 
 interface Props {
   game: string
@@ -43,8 +44,13 @@ const urlPrefix = computed(() => ({
   <v-expansion-panels>
     <v-expansion-panel>
       <v-expansion-panel-title>{{ $t("about.title") }}</v-expansion-panel-title>
-      <v-expansion-panel-text>
-        <div v-html="marked.parse($t('about.content', phContents))" />
+      <v-expansion-panel-text eager>
+        <client-only>
+          <div v-html="marked.parse($t('about.content', phContents))" />
+          <teleport to="#miss-rate-diagram">
+            <MissRateDiagram />
+          </teleport>
+        </client-only>
       </v-expansion-panel-text>
     </v-expansion-panel>
 
