@@ -199,6 +199,10 @@ pityCountWithRank: "{rank} pity count"
 prob: Chance to get a {rank} in the next 10-pull
 offBannerRate: "{rank} Off-banner Rate"
 notEnoughData: Not enough data
+pity:
+  offBanner: Off-banner
+  genshin:
+    capturingRadianceTriggered: Capturing Radiance triggered
 
 errors:
   invalidUrl: Invalid URL format. Please check again.

@@ -33,6 +33,11 @@ export const gachaTypes: Record<GameType, GachaType[]> = {
       star5PseudoPityBorder: 74,
       singleProb: 0.006,
       offBannerItems: offBannerGenshinChara,
+      consecutiveOffBannerGuarantee: {
+        threshold: 3,
+        startDate: "2024-08-28",
+        markerLabelKey: "pity.genshin.capturingRadianceTriggered",
+      },
     },
     {
       id: "302",

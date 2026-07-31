@@ -201,6 +201,10 @@ pityCountWithRank: "{rank} 天井カウント"
 prob: "{rank} 次の10連で引ける確率"
 offBannerRate: "{rank} すり抜け率"
 notEnoughData: データ不足
+pity:
+  offBanner: すり抜け
+  genshin:
+    capturingRadianceTriggered: 掴みし明光 発動
 
 errors:
   invalidUrl: URLの形式が正しくありません。再度確認してください。

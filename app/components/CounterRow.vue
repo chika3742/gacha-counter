@@ -142,9 +142,30 @@
                   size="35px"
                 />
                 <span>{{ value }}</span>
-                <v-icon v-if="item.offBanner">
-                  mdi-emoticon-sad
-                </v-icon>
+                <v-tooltip
+                  v-if="item.offBanner"
+                  location="top"
+                  :text="$t('pity.offBanner')"
+                >
+                  <template #activator="{ props: tooltipProps }">
+                    <v-icon
+                      v-bind="tooltipProps"
+                      icon="mdi-emoticon-sad"
+                    />
+                  </template>
+                </v-tooltip>
+                <v-tooltip
+                  v-if="item.isStreakGuarantee && gachaType.consecutiveOffBannerGuarantee"
+                  location="top"
+                  :text="$t(gachaType.consecutiveOffBannerGuarantee.markerLabelKey)"
+                >
+                  <template #activator="{ props: tooltipProps }">
+                    <v-icon
+                      v-bind="tooltipProps"
+                      icon="mdi-shimmer"
+                    />
+                  </template>
+                </v-tooltip>
               </div>
             </template>
 
@@ -172,12 +193,12 @@
 </template>
 
 <script lang="ts" setup>
-import { DateTime } from "luxon"
 import type { GachaLogEntry } from "~/types/db.js"
 import type { GachaType } from "~/types/gacha-type.js"
 import type { DataTableHeader } from "vuetify/framework"
 import AsyncImg from "~/components/AsyncImg.vue"
 import { rankTypeToColorClass, rankTypeToText, type RarityMeta } from "~/constants.js"
+import { computePityHistory } from "~/utils/pity-calculator.js"
 
 const props = defineProps<{
   entries: GachaLogEntry[]
@@ -185,19 +206,6 @@ const props = defineProps<{
   rarityMeta: RarityMeta
   showPityHistory: boolean
 }>()
-
-export interface PityCountListItem {
-  entryId: string
-  rank: string
-  type: string
-  name: string
-  count: number | null
-  countColorClass?: string
-  offBanner: boolean
-  isDefinitive: boolean | null
-  dateTime: DateTime
-  importImageUrl: string | undefined
-}
 
 const i18n = useI18n()
 
@@ -218,42 +226,11 @@ const tableHeaders = computed<DataTableHeader[]>(() => [
 ])
 
 const pityCounts = computed(() => {
-  const result: PityCountListItem[] = []
-
-  const pityCount: Record<string, number> = {}
-  for (const rankType of props.rarityMeta.rareRankTypes) {
-    pityCount[rankType] = 0
-  }
-
-  let definitive = false
-  for (const entry of props.entries) {
-    for (const key of Object.keys(pityCount)) {
-      pityCount[key]!++
-    }
-
-    const name = getItemName(entry)?.[i18n.locale.value] ?? entry.name
-    const item: PityCountListItem = {
-      entryId: entry.remoteId,
-      name,
-      type: entry.itemType,
-      count: pityCount[entry.rankType] ?? null,
-      countColorClass: getNumberColorClass(pityCount[entry.rankType], entry.rankType, props.gachaType.star5PseudoPityBorder),
-      offBanner: props.gachaType.offBannerItems.includes(getItemId(entry) ?? name),
-      isDefinitive: entry.rankType === props.rarityMeta.upperRankType ? definitive : null,
-      dateTime: DateTime.fromFormat(entry.time, "yyyy-MM-dd HH:mm:ss"),
-      rank: entry.rankType,
-      importImageUrl: getItemImage(entry),
-    }
-    result.push(item)
-    if (entry.rankType in pityCount) {
-      pityCount[entry.rankType] = 0
-    }
-    if (entry.rankType === props.rarityMeta.upperRankType) {
-      definitive = item.offBanner
-    }
-  }
-
-  return { list: result.reverse(), counts: pityCount }
+  return computePityHistory(props.entries, props.gachaType, props.rarityMeta, {
+    getName: entry => getItemName(entry)?.[i18n.locale.value] ?? entry.name,
+    getItemId,
+    getImage: getItemImage,
+  })
 })
 
 const filteredPityCountList = computed(() => {
@@ -293,38 +270,25 @@ const rank5Prob = computed(() => {
 })
 
 const rank5OffBannerRate = computed(() => {
-  const consideredRank5 = pityCounts.value.list.filter(e => e.rank === props.rarityMeta.upperRankType && e.isDefinitive === false)
+  const consideredRank5 = pityCounts.value.list.filter(e =>
+    e.rank === props.rarityMeta.upperRankType
+    && e.isDefinitive === false
+    && !e.isStreakGuarantee,
+  )
   if (consideredRank5.length < 2) {
     return null
   }
+  // The oldest entry's isDefinitive defaults to false because we don't know
+  // the outcome of the 5★ pulled before the history window. If it's a
+  // pickup, we can't tell whether it was a 50/50 win or a guaranteed pull
+  // following an out-of-window loss, so exclude it. Off-banner entries are
+  // safe to keep because off-banner can only occur during 50/50.
   if (!consideredRank5.slice(-1)[0]!.offBanner) {
     consideredRank5.pop()
   }
   const offBannerRank5 = consideredRank5.filter(e => e.offBanner).length
   return offBannerRank5 / consideredRank5.length
 })
-
-const getNumberColorClass = (count: number | undefined, rank: string, pseudoPityBorder: number) => {
-  if (!count) {
-    return ""
-  }
-
-  if (rank === props.rarityMeta.lowerRankType) {
-    if (count >= 10) {
-      return "text-pity"
-    } else {
-      return "text-lucky"
-    }
-  } else if (rank === props.rarityMeta.upperRankType) {
-    if (count > pseudoPityBorder) {
-      return "text-pity"
-    } else {
-      return "text-lucky"
-    }
-  } else {
-    return ""
-  }
-}
 </script>
 
 <style lang="sass" scoped>
