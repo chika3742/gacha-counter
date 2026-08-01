@@ -120,9 +120,8 @@ about:
     - While we may collect aggregate statistics such as page views, we do NOT collect the URLs you obtain via the methods below, nor any data retrieved through them. We also have no plans to display advertisements.
   missRateDiagram:
     legend:
-      miss: Off-banner (counted)
-      win: 50/50 win (counted)
-      excluded: Excluded
+      included: Included in calculation
+      excluded: Excluded from calculation
     labels:
       miss: Off-banner
       guaranteed: Guaranteed PU
@@ -131,13 +130,13 @@ about:
         (50/50 win)
       unknown: |-
         PU
-        (unknown)
+        (excluded)
       capturingRadiance: |-
         Capturing
         Radiance PU
     cases:
       case1:
-        title: "Case 1: Oldest is off-banner (normal)"
+        title: "Case 1: Oldest is an off-banner"
         description: The pickup right after an off-banner is always a "guaranteed PU", so it is excluded from the denominator.
         formula: Off-banner rate = 2 ÷ 3 ≒ 66.7%
       case2:
@@ -145,7 +144,7 @@ about:
         description: Without the preceding history, we can't tell whether it was a guaranteed pull or a 50/50 win — so it is excluded from the denominator.
         formula: Off-banner rate = 1 ÷ 2 = 50%
       case3:
-        title: "Case 3: Guaranteed by Capturing Radiance"
+        title: "Case 3: Guaranteed by Capturing Radiance (Genshin only)"
         description: After 3 consecutive 50/50 losses (each followed by its normal guaranteed PU), the following pickup becomes a Capturing Radiance guarantee and is excluded from the denominator.
         formula: Off-banner rate = 3 ÷ 3 = 100%
 

@@ -120,9 +120,8 @@ about:
     - 本サイトでは、アクセス数などの統計情報を収集することはあっても、下記の方法で取得できるURLや、そこから取得される情報は一切収集しておりません。また、広告の設置予定もありません。
   missRateDiagram:
     legend:
-      miss: すり抜け（母数に含む）
-      win: 通常枠でPU（母数に含む）
-      excluded: 除外（母数に含まない）
+      included: 計算の対象
+      excluded: 計算から除外
     labels:
       miss: すり抜け
       guaranteed: 確定PU
@@ -131,13 +130,13 @@ about:
         (通常枠)
       unknown: |-
         PU
-        (不明)
+        (除外)
       capturingRadiance: |-
         掴みし明光
         確定PU
     cases:
       case1:
-        title: ケース① 最古がすり抜け（通常）
+        title: ケース① 最古がすり抜けの場合
         description: すり抜け直後の☆5は必ず「確定PU」なので母数から除外されます。
         formula: すり抜け率 = 2 ÷ 3 ≒ 66.7%
       case2:
@@ -145,7 +144,7 @@ about:
         description: 直前の履歴がないため、確定枠か通常枠か判別できず母数から除外されます。
         formula: すり抜け率 = 1 ÷ 2 = 50%
       case3:
-        title: ケース③ 掴みし明光による確定枠
+        title: ケース③ 掴みし明光による確定枠（原神のみ）
         description: すり抜けを3連続で引き、それぞれの通常確定枠を経た次のPUが掴みし明光による確定となり母数から除外されます。
         formula: すり抜け率 = 3 ÷ 3 = 100%
 
