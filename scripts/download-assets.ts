@@ -27,11 +27,11 @@ const run = async () => {
   await convertJsonAndWrite(`${tempDir}/gm-assets/data/characters.json`, `${assetsDir}/genshin/data/characters.json`)
   await convertJsonAndWrite(`${tempDir}/gm-assets/data/weapons.json`, `${assetsDir}/genshin/data/weapons.json`)
 
-  await fs.cp(`${tempDir}/hsr-material/packages/nuxt/assets/img/characters`, `${assetsDir}/hsr/img/characters`, { recursive: true })
-  await fs.cp(`${tempDir}/hsr-material/packages/nuxt/assets/img/light-cones`, `${assetsDir}/hsr/img/light-cones`, { recursive: true })
+  await fs.cp(`${tempDir}/hsr-material/packages/nuxt/app/assets/img/characters`, `${assetsDir}/hsr/img/characters`, { recursive: true })
+  await fs.cp(`${tempDir}/hsr-material/packages/nuxt/app/assets/img/light-cones`, `${assetsDir}/hsr/img/light-cones`, { recursive: true })
   await fs.mkdir(`${assetsDir}/hsr/data`, { recursive: true })
-  await yamlFileToJsonAndWrite(`${tempDir}/hsr-material/packages/nuxt/assets/data/characters.yaml`, `${assetsDir}/hsr/data/characters.json`)
-  await yamlFileToJsonAndWrite(`${tempDir}/hsr-material/packages/nuxt/assets/data/light-cones.yaml`, `${assetsDir}/hsr/data/light-cones.json`)
+  await yamlFileToJsonAndWrite(`${tempDir}/hsr-material/packages/nuxt/app/assets/data/characters.yaml`, `${assetsDir}/hsr/data/characters.json`)
+  await yamlFileToJsonAndWrite(`${tempDir}/hsr-material/packages/nuxt/app/assets/data/light-cones.yaml`, `${assetsDir}/hsr/data/light-cones.json`)
 }
 
 const convertJsonAndWrite = async (input: string, output: string) => {
